@@ -115,4 +115,17 @@ describe('App component & UI interactions', () => {
       expect(screen.getByText(/Detailed Diff View/i)).toBeInTheDocument();
     });
   });
+
+  it('switches to JSON Inspector tab and displays structure and quality metrics', async () => {
+    render(<App />);
+    const inspectorTab = screen.getByRole('button', { name: /JSON Inspector/i });
+    fireEvent.click(inspectorTab);
+
+    await waitFor(() => {
+      expect(screen.getByText('JSON Structure & Quality Inspector')).toBeInTheDocument();
+      expect(screen.getByText('Total Objects')).toBeInTheDocument();
+      expect(screen.getByText('Total Arrays')).toBeInTheDocument();
+      expect(screen.getByText(/Quality Score:/i)).toBeInTheDocument();
+    });
+  });
 });

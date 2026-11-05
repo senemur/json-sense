@@ -13,6 +13,7 @@
 - **Format & Minify:** 2-space, 4-space, and tab indentation with instant byte, character, and line counters.
 - **Syntax Validator:** Friendly syntax error diagnostic with line, column, and error pointer snippet.
 - **Smart JSON Repair:** Safely fixes unquoted keys, trailing commas, single quotes, comments, Python/JS literals, and unclosed containers without mutating string contents.
+- **JSON Inspector:** Structure & quality analyzer computing nesting depth, object/array counts, type inconsistencies, missing schema fields, empty values, and duplicate IDs with exact JSONPath tracking.
 - **Tree Viewer:** Interactive, collapsible hierarchical explorer with instant keyword filtering.
 - **JSON to TypeScript:** Generates clean, idiomatic TypeScript interfaces with configurable root names and `export` toggles.
 - **JSON Diff:** Side-by-side comparison engine highlighting added, removed, and modified values.

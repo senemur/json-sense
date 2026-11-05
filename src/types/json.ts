@@ -98,3 +98,52 @@ export interface RepairResult {
   error?: string;
 }
 
+export type InspectorSeverity = 'warning' | 'info';
+
+export type InspectorCategory =
+  | 'type-inconsistency'
+  | 'schema-inconsistency'
+  | 'empty-value'
+  | 'null-value'
+  | 'empty-container'
+  | 'duplicate-value';
+
+export interface InspectorFinding {
+  id: string;
+  category: InspectorCategory;
+  severity: InspectorSeverity;
+  path: string;
+  message: string;
+  details?: string;
+  valueSummary?: string;
+}
+
+export interface InspectorStats {
+  totalObjects: number;
+  totalArrays: number;
+  totalProperties: number;
+  distinctKeysCount: number;
+  stringCount: number;
+  numberCount: number;
+  booleanCount: number;
+  nullCount: number;
+  totalValues: number;
+  maxDepth: number;
+  longestArray: { path: string; length: number } | null;
+  largestObject: { path: string; propertyCount: number } | null;
+  byteSize: number;
+}
+
+export interface InspectorResult {
+  isValid: boolean;
+  error?: string;
+  stats: InspectorStats;
+  findings: InspectorFinding[];
+  summary: {
+    totalFindings: number;
+    warningCount: number;
+    infoCount: number;
+    qualityScore: number;
+  };
+}
+

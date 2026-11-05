@@ -3,6 +3,7 @@ import { Header } from './components/Header';
 import type { TabId } from './components/Header';
 import { FormatterTab } from './features/formatter/FormatterTab';
 import { TreeViewTab } from './features/tree-view/TreeViewTab';
+import { InspectorTab } from './features/inspector/InspectorTab';
 import { TypeScriptTab } from './features/typescript-generator/TypeScriptTab';
 import { JsonDiffTab } from './features/json-diff/JsonDiffTab';
 import { useTheme } from './hooks/useTheme';
@@ -19,8 +20,9 @@ const INITIAL_JSON = JSON.stringify(
       { id: 2, name: 'Syntax Validator', ready: true },
       { id: 3, name: 'Smart JSON Repair', ready: true },
       { id: 4, name: 'Tree Viewer', ready: true },
-      { id: 5, name: 'TypeScript Interface Generator', ready: true },
-      { id: 6, name: 'JSON Comparison Diff', ready: true },
+      { id: 5, name: 'Structure & Quality Inspector', ready: true },
+      { id: 6, name: 'TypeScript Interface Generator', ready: true },
+      { id: 7, name: 'JSON Comparison Diff', ready: true },
     ],
     stats: {
       stars: 120,
@@ -56,6 +58,13 @@ export function App() {
 
         {activeTab === 'tree' && (
           <TreeViewTab json={jsonText} />
+        )}
+
+        {activeTab === 'inspector' && (
+          <InspectorTab
+            json={jsonText}
+            onNavigateToFormatter={() => setActiveTab('formatter')}
+          />
         )}
 
         {activeTab === 'typescript' && (

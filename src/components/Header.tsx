@@ -1,6 +1,6 @@
 import type { Theme } from '../hooks/useTheme';
 
-export type TabId = 'formatter' | 'tree' | 'typescript' | 'diff';
+export type TabId = 'formatter' | 'tree' | 'inspector' | 'typescript' | 'diff';
 
 interface HeaderProps {
   activeTab: TabId;
@@ -18,6 +18,7 @@ export function Header({
   const tabs: { id: TabId; label: string; icon: string }[] = [
     { id: 'formatter', label: 'Format & Validate', icon: '{ }' },
     { id: 'tree', label: 'Tree Viewer', icon: '🌲' },
+    { id: 'inspector', label: 'JSON Inspector', icon: '🔍' },
     { id: 'typescript', label: 'JSON to TypeScript', icon: 'TS' },
     { id: 'diff', label: 'JSON Diff', icon: '±' },
   ];
