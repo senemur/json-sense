@@ -1,4 +1,17 @@
+import type { ComponentType } from 'react';
 import type { Theme } from '../hooks/useTheme';
+import {
+  LayoutDashboard,
+  Code2,
+  FolderTree,
+  FileSearch,
+  Boxes,
+  FileCode2,
+  GitCompare,
+  Sun,
+  Moon,
+  ShieldCheck,
+} from 'lucide-react';
 
 export type TabId = 'overview' | 'formatter' | 'tree' | 'inspector' | 'schema' | 'typescript' | 'diff';
 
@@ -15,14 +28,14 @@ export function Header({
   theme,
   onToggleTheme,
 }: HeaderProps) {
-  const tabs: { id: TabId; label: string; icon: string }[] = [
-    { id: 'overview', label: 'Overview', icon: '✦' },
-    { id: 'formatter', label: 'Format & Validate', icon: '{ }' },
-    { id: 'tree', label: 'Tree Viewer', icon: '🌲' },
-    { id: 'inspector', label: 'JSON Inspector', icon: '🔍' },
-    { id: 'schema', label: 'Schema Studio', icon: '📐' },
-    { id: 'typescript', label: 'JSON to TypeScript', icon: 'TS' },
-    { id: 'diff', label: 'JSON Diff', icon: '±' },
+  const tabs: { id: TabId; label: string; icon: ComponentType<{ className?: string }> }[] = [
+    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+    { id: 'formatter', label: 'Format & Validate', icon: Code2 },
+    { id: 'tree', label: 'Tree Viewer', icon: FolderTree },
+    { id: 'inspector', label: 'JSON Inspector', icon: FileSearch },
+    { id: 'schema', label: 'Schema Studio', icon: Boxes },
+    { id: 'typescript', label: 'JSON to TypeScript', icon: FileCode2 },
+    { id: 'diff', label: 'JSON Diff', icon: GitCompare },
   ];
 
   return (
@@ -56,10 +69,10 @@ export function Header({
           {/* Privacy badge and Theme Toggle */}
           <div className="flex items-center gap-3">
             <div
-              title="All processing occurs locally in your browser. No JSON is ever sent to any server."
+              title="All processing occurs locally in your browser memory. No payload is transmitted to external servers."
               className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-[#8d2f43]/5 text-[#8d2f43] dark:bg-[#8d2f43]/20 dark:text-[#e6c76e] border border-[#8d2f43]/20 dark:border-[#8d2f43]/40"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#8d2f43] dark:bg-[#e6c76e] animate-pulse" />
+              <ShieldCheck className="w-3.5 h-3.5 text-[#8d2f43] dark:text-[#e6c76e]" />
               <span>100% In-Browser &amp; Private</span>
             </div>
 
@@ -68,7 +81,11 @@ export function Header({
               aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
               className="p-2 rounded-lg text-zinc-600 dark:text-zinc-300 hover:bg-[#8d2f43]/10 dark:hover:bg-[#8d2f43]/20 border border-[#8d2f43]/20 dark:border-[#8d2f43]/40 transition-colors cursor-pointer"
             >
-              {theme === 'dark' ? '☀️' : '🌙'}
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4 text-[#e6c76e]" />
+              ) : (
+                <Moon className="w-4 h-4 text-zinc-700" />
+              )}
             </button>
           </div>
         </div>
@@ -77,6 +94,7 @@ export function Header({
         <nav className="flex space-x-1 sm:space-x-2 overflow-x-auto pb-2 scrollbar-none" aria-label="Tabs">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
+            const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
@@ -88,7 +106,7 @@ export function Header({
                 }`}
                 aria-current={isActive ? 'page' : undefined}
               >
-                <span className={`font-mono text-xs ${isActive ? 'text-[#e6c76e]' : 'opacity-80'}`}>{tab.icon}</span>
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#e6c76e]' : 'opacity-70'}`} />
                 <span>{tab.label}</span>
               </button>
             );

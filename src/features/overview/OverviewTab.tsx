@@ -1,4 +1,20 @@
+import { useState } from 'react';
 import type { TabId } from '../../components/Header';
+import {
+  Wrench,
+  FileSearch,
+  Boxes,
+  FileCode2,
+  GitCompare,
+  FolderTree,
+  ShieldCheck,
+  Zap,
+  CheckCircle2,
+  Play,
+  ArrowRight,
+  Code2,
+  AlertTriangle,
+} from 'lucide-react';
 
 interface OverviewTabProps {
   onNavigateToTab: (tab: TabId, demoJson?: string) => void;
@@ -15,7 +31,45 @@ const DEMO_MALFORMED_JSON = `{
   },
 }`;
 
+const DEMO_REPAIRED_JSON = `{
+  "name": "Senem",
+  "title": "Full-Stack Software Engineer",
+  "verified": true,
+  "skills": [
+    "TypeScript",
+    "React",
+    "Vite",
+    "Playwright"
+  ],
+  "portfolio": {
+    "openSource": true,
+    "stars": 120
+  }
+}`;
+
+const DEMO_INFERRED_SCHEMA = `{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "title": { "type": "string" },
+    "verified": { "type": "boolean" },
+    "skills": { "type": "array", "items": { "type": "string" } },
+    "portfolio": {
+      "type": "object",
+      "properties": {
+        "openSource": { "type": "boolean" },
+        "stars": { "type": "integer" }
+      },
+      "required": ["openSource", "stars"]
+    }
+  },
+  "required": ["name", "title", "verified", "skills", "portfolio"]
+}`;
+
 export function OverviewTab({ onNavigateToTab }: OverviewTabProps) {
+  const [activeDemoStep, setActiveDemoStep] = useState<number>(1);
+
   const handleStartInteractiveDemo = () => {
     onNavigateToTab('formatter', DEMO_MALFORMED_JSON);
   };
@@ -23,52 +77,66 @@ export function OverviewTab({ onNavigateToTab }: OverviewTabProps) {
   return (
     <div className="flex flex-col gap-10 py-2 max-w-6xl mx-auto">
       {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-3xl border border-[#8d2f43]/20 dark:border-[#8d2f43]/40 bg-gradient-to-b from-white via-white to-[#f7f3f3]/50 dark:from-[#180c10] dark:via-[#150a0d] dark:to-[#100608] p-6 sm:p-10 shadow-sm">
-        <div className="max-w-3xl flex flex-col gap-4">
+      <section className="relative overflow-hidden rounded-3xl border border-[#8d2f43]/20 dark:border-[#8d2f43]/40 bg-gradient-to-b from-white via-white to-[#f7f3f3]/50 dark:from-[#180c10] dark:via-[#150a0d] dark:to-[#100608] p-6 sm:p-8 shadow-sm">
+        <div className="max-w-3xl flex flex-col gap-3.5">
+          {/* Status Badges */}
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#8d2f43]/10 text-[#8d2f43] dark:bg-[#8d2f43]/30 dark:text-[#e6c76e] border border-[#8d2f43]/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#8d2f43] dark:bg-[#e6c76e] animate-pulse" />
-              100% Client-Side Engine
+              <ShieldCheck className="w-3.5 h-3.5 text-[#8d2f43] dark:text-[#e6c76e]" />
+              In-Memory Client Engine
             </span>
-            <span className="px-2.5 py-1 rounded-full text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700">
-              Zero Telemetry &bull; Zero Server Requests
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700">
+              Client-Side Execution &bull; Zero Server Requests
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 leading-tight">
+          {/* Balanced Headline */}
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-zinc-950 dark:text-zinc-50 leading-snug">
             The privacy-first developer studio for{' '}
             <span className="text-[#8d2f43] dark:text-[#e6c76e]">JSON</span>.
           </h1>
 
-          <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-300 leading-relaxed">
-            JsonSense is an offline-capable developer utility built for real-world engineering workflows.
-            Format, diagnose syntax errors, safely auto-repair malformed payloads, inspect structural telemetry,
-            infer standard JSON Schemas from multi-sample batches, and validate payloads—all inside client memory.
+          {/* Subtitle Description */}
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
+            JsonSense is an offline-capable developer suite engineered for production workflows.
+            Format, diagnose syntax faults, safely auto-repair malformed payloads, audit structural quality,
+            infer unified JSON Schemas from multi-sample batches, and test payloads with exact JSONPath diagnostics.
           </p>
 
-          {/* Quick CTA Buttons */}
-          <div className="flex flex-wrap items-center gap-3 pt-3">
-            <button
-              type="button"
-              onClick={() => onNavigateToTab('formatter')}
-              className="px-5 py-2.5 rounded-xl bg-[#8d2f43] hover:bg-[#732334] text-white text-xs sm:text-sm font-semibold shadow-sm transition cursor-pointer flex items-center gap-2"
-            >
-              <span>Launch Format &amp; Validate</span>
-              <span>➔</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => onNavigateToTab('schema')}
-              className="px-5 py-2.5 rounded-xl bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs sm:text-sm font-semibold border border-zinc-300 dark:border-zinc-700 shadow-sm transition cursor-pointer flex items-center gap-2"
-            >
-              <span>📐 Schema Studio</span>
-            </button>
+          {/* Prominent CTA Actions */}
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            {/* Highly Prominent "Run 5-Step Demo" Button */}
             <button
               type="button"
               onClick={handleStartInteractiveDemo}
-              className="px-4 py-2.5 rounded-xl bg-[#e6c76e]/20 hover:bg-[#e6c76e]/30 text-[#8d2f43] dark:text-[#e6c76e] text-xs sm:text-sm font-semibold border border-[#e6c76e]/40 transition cursor-pointer flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl bg-[#8d2f43] hover:bg-[#732334] text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center gap-2.5 border border-[#e6c76e]/50 ring-2 ring-[#8d2f43]/20 dark:ring-[#e6c76e]/20 group"
+              title="Start guided 5-step demonstration with sample malformed payload"
             >
-              <span> Run 5-Step Demo</span>
+              <div className="w-5 h-5 rounded-full bg-[#e6c76e] text-[#8d2f43] flex items-center justify-center font-bold">
+                <Play className="w-3 h-3 fill-current ml-0.5" />
+              </div>
+              <span className="tracking-wide">Run 5-Step Demo</span>
+              <ArrowRight className="w-4 h-4 text-[#e6c76e] group-hover:translate-x-0.5 transition-transform" />
+            </button>
+
+            {/* Launch Formatter */}
+            <button
+              type="button"
+              onClick={() => onNavigateToTab('formatter')}
+              className="px-4 py-2.5 rounded-xl bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs sm:text-sm font-semibold border border-zinc-300 dark:border-zinc-700 shadow-sm transition cursor-pointer flex items-center gap-2"
+            >
+              <Code2 className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />
+              <span>Launch Format &amp; Validate</span>
+            </button>
+
+            {/* Launch Schema Studio */}
+            <button
+              type="button"
+              onClick={() => onNavigateToTab('schema')}
+              className="px-4 py-2.5 rounded-xl bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs sm:text-sm font-semibold border border-zinc-300 dark:border-zinc-700 shadow-sm transition cursor-pointer flex items-center gap-2"
+            >
+              <Boxes className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <span>Schema Studio</span>
             </button>
           </div>
         </div>
@@ -77,7 +145,7 @@ export function OverviewTab({ onNavigateToTab }: OverviewTabProps) {
       {/* Feature Capabilities Grid */}
       <section className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <h2 className="text-xl font-bold text-[#8d2f43] dark:text-[#e6c76e] tracking-tight">
+          <h2 className="text-lg sm:text-xl font-bold text-[#8d2f43] dark:text-[#e6c76e] tracking-tight">
             Developer Capabilities
           </h2>
           <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400">
@@ -91,9 +159,11 @@ export function OverviewTab({ onNavigateToTab }: OverviewTabProps) {
             onClick={() => onNavigateToTab('formatter')}
             className="group p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-[#8d2f43]/40 dark:hover:border-[#8d2f43]/60 transition shadow-sm cursor-pointer flex flex-col justify-between"
           >
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-2xl">🛠️</span>
+                <div className="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200/60 dark:border-amber-900/60">
+                  <Wrench className="w-4 h-4 text-amber-700 dark:text-amber-400" />
+                </div>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-900">
                   AST Scanner
                 </span>
@@ -116,9 +186,11 @@ export function OverviewTab({ onNavigateToTab }: OverviewTabProps) {
             onClick={() => onNavigateToTab('inspector')}
             className="group p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-[#8d2f43]/40 dark:hover:border-[#8d2f43]/60 transition shadow-sm cursor-pointer flex flex-col justify-between"
           >
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-2xl">🔍</span>
+                <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200/60 dark:border-blue-900/60">
+                  <FileSearch className="w-4 h-4 text-blue-700 dark:text-blue-400" />
+                </div>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
                   Quality Audit
                 </span>
@@ -141,9 +213,11 @@ export function OverviewTab({ onNavigateToTab }: OverviewTabProps) {
             onClick={() => onNavigateToTab('schema')}
             className="group p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-[#8d2f43]/40 dark:hover:border-[#8d2f43]/60 transition shadow-sm cursor-pointer flex flex-col justify-between"
           >
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-2xl">📐</span>
+                <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-900/60">
+                  <Boxes className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
+                </div>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900">
                   Schema Engine
                 </span>
@@ -166,9 +240,11 @@ export function OverviewTab({ onNavigateToTab }: OverviewTabProps) {
             onClick={() => onNavigateToTab('typescript')}
             className="group p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-[#8d2f43]/40 dark:hover:border-[#8d2f43]/60 transition shadow-sm cursor-pointer flex flex-col justify-between"
           >
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-2xl">TS</span>
+                <div className="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200/60 dark:border-indigo-900/60">
+                  <FileCode2 className="w-4 h-4 text-indigo-700 dark:text-indigo-400" />
+                </div>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-900">
                   Code Generation
                 </span>
@@ -191,9 +267,11 @@ export function OverviewTab({ onNavigateToTab }: OverviewTabProps) {
             onClick={() => onNavigateToTab('diff')}
             className="group p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-[#8d2f43]/40 dark:hover:border-[#8d2f43]/60 transition shadow-sm cursor-pointer flex flex-col justify-between"
           >
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-2xl">±</span>
+                <div className="p-2 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200/60 dark:border-purple-900/60">
+                  <GitCompare className="w-4 h-4 text-purple-700 dark:text-purple-400" />
+                </div>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300 border border-purple-200 dark:border-purple-900">
                   Semantic Diff
                 </span>
@@ -216,9 +294,11 @@ export function OverviewTab({ onNavigateToTab }: OverviewTabProps) {
             onClick={() => onNavigateToTab('tree')}
             className="group p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-[#8d2f43]/40 dark:hover:border-[#8d2f43]/60 transition shadow-sm cursor-pointer flex flex-col justify-between"
           >
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-2xl">🌲</span>
+                <div className="p-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200/60 dark:border-rose-900/60">
+                  <FolderTree className="w-4 h-4 text-rose-700 dark:text-rose-400" />
+                </div>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-200 dark:border-rose-900">
                   DOM Navigation
                 </span>
@@ -238,13 +318,15 @@ export function OverviewTab({ onNavigateToTab }: OverviewTabProps) {
         </div>
       </section>
 
-      {/* 5-Step Demo Walkthrough Showcase */}
-      <section className="flex flex-col gap-5 p-6 sm:p-8 rounded-3xl border border-[#8d2f43]/20 dark:border-[#8d2f43]/40 bg-white dark:bg-[#180c10] shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      {/* 5-Step Demo Walkthrough Showcase with Interactive Preview */}
+      <section className="flex flex-col gap-6 p-6 sm:p-8 rounded-3xl border border-[#8d2f43]/20 dark:border-[#8d2f43]/40 bg-white dark:bg-[#180c10] shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-100 dark:border-zinc-800 pb-5">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xl">🎬</span>
-              <h2 className="text-lg font-bold text-[#8d2f43] dark:text-[#e6c76e]">
+              <div className="p-1.5 rounded-lg bg-[#8d2f43]/10 dark:bg-[#8d2f43]/30">
+                <Play className="w-4 h-4 text-[#8d2f43] dark:text-[#e6c76e] fill-current" />
+              </div>
+              <h2 className="text-base sm:text-lg font-bold text-[#8d2f43] dark:text-[#e6c76e]">
                 5-Step Live Demonstration Walkthrough
               </h2>
             </div>
@@ -256,85 +338,240 @@ export function OverviewTab({ onNavigateToTab }: OverviewTabProps) {
           <button
             type="button"
             onClick={handleStartInteractiveDemo}
-            className="px-4 py-2 rounded-xl bg-[#8d2f43] hover:bg-[#732334] text-white text-xs font-bold shadow-sm transition cursor-pointer flex items-center gap-1.5 self-start sm:self-auto"
+            className="px-4 py-2 rounded-xl bg-[#8d2f43] hover:bg-[#732334] text-white text-xs font-bold shadow-sm transition cursor-pointer flex items-center gap-2 self-start sm:self-auto"
           >
-            <span>Start Step 1</span>
+            <Play className="w-3.5 h-3.5 fill-current text-[#e6c76e]" />
+            <span>Start Live Demo Flow</span>
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-3 pt-2">
+        {/* Step Cards with Active Selection */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
           {/* Step 1 */}
-          <div className="flex flex-col gap-2 p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950">
+          <button
+            type="button"
+            onClick={() => setActiveDemoStep(1)}
+            className={`text-left flex flex-col gap-1.5 p-3 rounded-xl border transition cursor-pointer ${
+              activeDemoStep === 1
+                ? 'border-[#8d2f43] dark:border-[#e6c76e] bg-[#8d2f43]/5 dark:bg-[#8d2f43]/20 shadow-xs'
+                : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 hover:border-zinc-300'
+            }`}
+          >
             <span className="text-[10px] font-mono font-bold text-[#8d2f43] dark:text-[#e6c76e] uppercase tracking-wider">
               Step 1
             </span>
             <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">Malformed Input</h4>
             <p className="text-[11px] text-zinc-600 dark:text-zinc-400 leading-normal">
-              Developer pastes raw payload containing single quotes, unquoted keys, and trailing commas.
+              Raw payload containing single quotes, unquoted keys, and trailing commas.
             </p>
-          </div>
+          </button>
 
           {/* Step 2 */}
-          <div className="flex flex-col gap-2 p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950">
+          <button
+            type="button"
+            onClick={() => setActiveDemoStep(2)}
+            className={`text-left flex flex-col gap-1.5 p-3 rounded-xl border transition cursor-pointer ${
+              activeDemoStep === 2
+                ? 'border-[#8d2f43] dark:border-[#e6c76e] bg-[#8d2f43]/5 dark:bg-[#8d2f43]/20 shadow-xs'
+                : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 hover:border-zinc-300'
+            }`}
+          >
             <span className="text-[10px] font-mono font-bold text-[#8d2f43] dark:text-[#e6c76e] uppercase tracking-wider">
               Step 2
             </span>
             <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">Smart Repair</h4>
             <p className="text-[11px] text-zinc-600 dark:text-zinc-400 leading-normal">
-              Smart Repair diagnoses fixes, renders confidence badges, and applies clean JSON without string mutation.
+              Diagnoses fixes, renders confidence badges, and produces clean JSON.
             </p>
-          </div>
+          </button>
 
           {/* Step 3 */}
-          <div className="flex flex-col gap-2 p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950">
+          <button
+            type="button"
+            onClick={() => setActiveDemoStep(3)}
+            className={`text-left flex flex-col gap-1.5 p-3 rounded-xl border transition cursor-pointer ${
+              activeDemoStep === 3
+                ? 'border-[#8d2f43] dark:border-[#e6c76e] bg-[#8d2f43]/5 dark:bg-[#8d2f43]/20 shadow-xs'
+                : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 hover:border-zinc-300'
+            }`}
+          >
             <span className="text-[10px] font-mono font-bold text-[#8d2f43] dark:text-[#e6c76e] uppercase tracking-wider">
               Step 3
             </span>
-            <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">Telemetry &amp; Audit</h4>
+            <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">Quality Audit</h4>
             <p className="text-[11px] text-zinc-600 dark:text-zinc-400 leading-normal">
-              Switch to JSON Inspector to review max nesting depth, quality scores, and exact JSONPath coordinates.
+              Review max nesting depth, quality scores, and exact JSONPath coordinates.
             </p>
-          </div>
+          </button>
 
           {/* Step 4 */}
-          <div className="flex flex-col gap-2 p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950">
+          <button
+            type="button"
+            onClick={() => setActiveDemoStep(4)}
+            className={`text-left flex flex-col gap-1.5 p-3 rounded-xl border transition cursor-pointer ${
+              activeDemoStep === 4
+                ? 'border-[#8d2f43] dark:border-[#e6c76e] bg-[#8d2f43]/5 dark:bg-[#8d2f43]/20 shadow-xs'
+                : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 hover:border-zinc-300'
+            }`}
+          >
             <span className="text-[10px] font-mono font-bold text-[#8d2f43] dark:text-[#e6c76e] uppercase tracking-wider">
               Step 4
             </span>
             <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">Schema Studio</h4>
             <p className="text-[11px] text-zinc-600 dark:text-zinc-400 leading-normal">
-              Add multiple payload variations in Schema Studio to infer unified types, integer promotion, and required properties.
+              Infer unified types, integer promotion, and required properties from multi-sample sets.
             </p>
-          </div>
+          </button>
 
           {/* Step 5 */}
-          <div className="flex flex-col gap-2 p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950">
+          <button
+            type="button"
+            onClick={() => setActiveDemoStep(5)}
+            className={`text-left flex flex-col gap-1.5 p-3 rounded-xl border transition cursor-pointer ${
+              activeDemoStep === 5
+                ? 'border-[#8d2f43] dark:border-[#e6c76e] bg-[#8d2f43]/5 dark:bg-[#8d2f43]/20 shadow-xs'
+                : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 hover:border-zinc-300'
+            }`}
+          >
             <span className="text-[10px] font-mono font-bold text-[#8d2f43] dark:text-[#e6c76e] uppercase tracking-wider">
               Step 5
             </span>
             <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">Live Validation</h4>
             <p className="text-[11px] text-zinc-600 dark:text-zinc-400 leading-normal">
-              Test incoming payloads in the Validation Workbench with instant expected vs. received violation tables.
+              Test incoming payloads with instant expected vs. received violation tables.
             </p>
+          </button>
+        </div>
+
+        {/* Step Preview Box (Interactive Visual Walkthrough) */}
+        <div className="p-4 sm:p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/60 flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#8d2f43] dark:bg-[#e6c76e]" />
+              {activeDemoStep === 1 && 'Preview: Raw Malformed Payload (Unquoted keys, Python literals, trailing comma)'}
+              {activeDemoStep === 2 && 'Preview: Deterministic AST Repair Output (Standard RFC 8259)'}
+              {activeDemoStep === 3 && 'Preview: Inspector Telemetry (Nesting depth: 2, 2 Objects, 1 Array, 0 Nulls)'}
+              {activeDemoStep === 4 && 'Preview: Inferred JSON Schema (Draft-07 Structure)'}
+              {activeDemoStep === 5 && 'Preview: Validation Workbench Error Diagnostic Table'}
+            </span>
+            <button
+              type="button"
+              onClick={handleStartInteractiveDemo}
+              className="text-xs font-semibold text-[#8d2f43] dark:text-[#e6c76e] hover:underline cursor-pointer flex items-center gap-1"
+            >
+              <span>Open in Editor</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
+
+          {activeDemoStep === 1 && (
+            <div className="flex flex-col gap-2">
+              <div className="p-2.5 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/40 text-xs text-red-700 dark:text-red-300 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 shrink-0 text-red-600 dark:text-red-400" />
+                <span>Detected 4 syntax faults: Unquoted key `name`, Python literal `True`, trailing comma after `'Playwright'`, unquoted `portfolio`.</span>
+              </div>
+              <pre className="p-3 rounded-xl bg-zinc-900 text-zinc-100 font-mono text-xs overflow-x-auto leading-relaxed border border-zinc-800">
+                {DEMO_MALFORMED_JSON}
+              </pre>
+            </div>
+          )}
+
+          {activeDemoStep === 2 && (
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 text-[11px] font-medium border border-emerald-200">
+                  Quote key `name` (High Confidence)
+                </span>
+                <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 text-[11px] font-medium border border-emerald-200">
+                  Convert `True` &rarr; `true` (High Confidence)
+                </span>
+                <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 text-[11px] font-medium border border-emerald-200">
+                  Strip trailing comma (High Confidence)
+                </span>
+              </div>
+              <pre className="p-3 rounded-xl bg-zinc-900 text-emerald-300 font-mono text-xs overflow-x-auto leading-relaxed border border-zinc-800">
+                {DEMO_REPAIRED_JSON}
+              </pre>
+            </div>
+          )}
+
+          {activeDemoStep === 3 && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+                <span className="text-[10px] text-zinc-500 uppercase font-mono">Max Depth</span>
+                <p className="text-base font-bold text-zinc-900 dark:text-zinc-100">2</p>
+              </div>
+              <div className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+                <span className="text-[10px] text-zinc-500 uppercase font-mono">Objects</span>
+                <p className="text-base font-bold text-zinc-900 dark:text-zinc-100">2</p>
+              </div>
+              <div className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+                <span className="text-[10px] text-zinc-500 uppercase font-mono">Arrays</span>
+                <p className="text-base font-bold text-zinc-900 dark:text-zinc-100">1</p>
+              </div>
+              <div className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+                <span className="text-[10px] text-zinc-500 uppercase font-mono">Total Props</span>
+                <p className="text-base font-bold text-zinc-900 dark:text-zinc-100">7</p>
+              </div>
+            </div>
+          )}
+
+          {activeDemoStep === 4 && (
+            <pre className="p-3 rounded-xl bg-zinc-900 text-amber-200 font-mono text-xs overflow-x-auto leading-relaxed border border-zinc-800">
+              {DEMO_INFERRED_SCHEMA}
+            </pre>
+          )}
+
+          {activeDemoStep === 5 && (
+            <div className="overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-mono text-[11px]">
+                  <tr>
+                    <th className="px-3 py-2">Path</th>
+                    <th className="px-3 py-2">Keyword</th>
+                    <th className="px-3 py-2">Expected</th>
+                    <th className="px-3 py-2">Received</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                  <tr>
+                    <td className="px-3 py-2 font-mono text-[#8d2f43] dark:text-[#e6c76e]">$.name</td>
+                    <td className="px-3 py-2 font-mono">type</td>
+                    <td className="px-3 py-2 text-zinc-600 dark:text-zinc-400">string</td>
+                    <td className="px-3 py-2 text-red-600 dark:text-red-400">number</td>
+                  </tr>
+                  <tr>
+                    <td className="px-3 py-2 font-mono text-[#8d2f43] dark:text-[#e6c76e]">$.portfolio.stars</td>
+                    <td className="px-3 py-2 font-mono">required</td>
+                    <td className="px-3 py-2 text-zinc-600 dark:text-zinc-400">present</td>
+                    <td className="px-3 py-2 text-red-600 dark:text-red-400">missing</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Privacy Architecture Guarantee */}
+      {/* Client-Side Architecture Guarantees */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex flex-col gap-2">
-          <div className="text-xl">🛡️</div>
+          <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-900/60 w-fit">
+            <ShieldCheck className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
+          </div>
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
-            Zero Server Exposure
+            Client-Side Execution
           </h3>
           <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-            Many online JSON formatters send your data to external servers, exposing API tokens and PII.
-            JsonSense runs 100% inside your browser environment.
+            All parsing, repair, AST analysis, and schema validation execute strictly within your local browser JavaScript engine.
+            No JSON data is sent to external servers.
           </p>
         </div>
 
         <div className="p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex flex-col gap-2">
-          <div className="text-xl">⚡</div>
+          <div className="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200/60 dark:border-amber-900/60 w-fit">
+            <Zap className="w-4 h-4 text-amber-700 dark:text-amber-400" />
+          </div>
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
             Sub-millisecond Performance
           </h3>
@@ -345,13 +582,15 @@ export function OverviewTab({ onNavigateToTab }: OverviewTabProps) {
         </div>
 
         <div className="p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex flex-col gap-2">
-          <div className="text-xl">🧪</div>
+          <div className="p-2 rounded-xl bg-[#8d2f43]/10 dark:bg-[#8d2f43]/30 border border-[#8d2f43]/20 dark:border-[#8d2f43]/40 w-fit">
+            <CheckCircle2 className="w-4 h-4 text-[#8d2f43] dark:text-[#e6c76e]" />
+          </div>
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
             Verified Engineering
           </h3>
           <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-            Covered by 18 Vitest test suites, 176 unit tests, property-based permutation invariance suites,
-            and 32 Chromium Playwright E2E browser flows.
+            Covered by 19 Vitest test suites, 179 unit tests, property-based permutation invariance suites,
+            and 35 Chromium Playwright E2E browser flows.
           </p>
         </div>
       </section>
