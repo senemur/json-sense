@@ -7,22 +7,32 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies and Builds
 node_modules
 dist
 dist-ssr
 *.local
 
-# Playwright
+# Environment variables and secrets
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.cert
+
+# Playwright & Testing Artifacts
 test-results/
 playwright-report/
 blob-report/
 playwright/.cache/
 
-# Editor directories and files
+# Editor and OS directories
 .vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj
