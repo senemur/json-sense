@@ -1,5 +1,9 @@
 # JsonSense — The Privacy-First Developer Studio for JSON
+<div align="center">
+  
+[![Live Demo](https://img.shields.io/badge/demo-online-green.svg?style=for-the-badge&logo=vercel)](https://json-sense.vercel.app/)
 
+</div>
 <p align="center">
   <img src="./public/logo.png" alt="JsonSense Logo" width="160" />
 </p>
