@@ -64,7 +64,7 @@ describe('App component & UI interactions', () => {
     });
   });
 
-  it('switches to Tree Viewer tab and displays tree nodes', async () => {
+  it('switches to Tree Viewer tab and handles collapse and expand all', async () => {
     render(<App />);
     const treeTab = screen.getByRole('button', { name: /Tree Viewer/i });
     fireEvent.click(treeTab);
@@ -72,6 +72,23 @@ describe('App component & UI interactions', () => {
     await waitFor(() => {
       expect(screen.getByPlaceholderText(/Filter keys or values/i)).toBeInTheDocument();
       expect(screen.getByText(/description:/i)).toBeInTheDocument();
+    });
+
+    // Test Collapse All
+    const collapseBtn = screen.getByRole('button', { name: 'Collapse All' });
+    fireEvent.click(collapseBtn);
+
+    await waitFor(() => {
+      // After collapsing, nested properties inside objects should be collapsed
+      expect(screen.queryByText(/stars:/i)).toBeNull();
+    });
+
+    // Test Expand All
+    const expandBtn = screen.getByRole('button', { name: 'Expand All' });
+    fireEvent.click(expandBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText(/stars:/i)).toBeInTheDocument();
     });
   });
 

@@ -10,6 +10,31 @@ interface InterfaceDefinition {
   }[];
 }
 
+const TS_RESERVED_KEYWORDS = new Set([
+  'any', 'unknown', 'never', 'void', 'null', 'undefined', 'boolean', 'number',
+  'string', 'symbol', 'bigint', 'object', 'interface', 'type', 'class', 'enum',
+  'function', 'const', 'var', 'let', 'export', 'import', 'default', 'return',
+  'switch', 'case', 'break', 'continue', 'if', 'else', 'while', 'for', 'do',
+  'in', 'of', 'try', 'catch', 'finally', 'throw', 'new', 'this', 'super',
+  'extends', 'implements', 'package', 'private', 'protected', 'public',
+  'static', 'yield', 'async', 'await'
+]);
+
+function toPascalCase(str: string): string {
+  return str
+    .replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
+    .replace(/^[^a-zA-Z]+/, '')
+    .replace(/^[a-z]/, (chr) => chr.toUpperCase());
+}
+
+function sanitizeInterfaceName(raw: string): string {
+  let pascal = toPascalCase(raw) || 'Item';
+  if (TS_RESERVED_KEYWORDS.has(pascal.toLowerCase())) {
+    pascal = `${pascal}Data`;
+  }
+  return pascal;
+}
+
 /**
  * Converts a JSON string or parsed JSON object into TypeScript interfaces/types.
  * Absolutely safe: strictly parses with JSON.parse; never evaluates code.
@@ -38,7 +63,9 @@ export function generateTypeScript(
     parsed = input;
   }
 
-  const rootName = options.rootName?.trim() || 'Root';
+  // Ensure rootName is a valid, sanitized PascalCase identifier
+  const rawRoot = options.rootName?.trim() || 'Root';
+  const rootName = sanitizeInterfaceName(rawRoot) || 'Root';
   const exportPrefix = options.exportTypes !== false ? 'export ' : '';
 
   try {
@@ -46,7 +73,7 @@ export function generateTypeScript(
     const usedNames = new Set<string>();
 
     function getUniqueInterfaceName(baseName: string): string {
-      const name = toPascalCase(baseName) || 'Item';
+      const name = sanitizeInterfaceName(baseName);
       if (!usedNames.has(name)) {
         usedNames.add(name);
         return name;
@@ -86,7 +113,7 @@ export function generateTypeScript(
         const areAllObjects = val.every((item) => item !== null && typeof item === 'object' && !Array.isArray(item));
 
         if (areAllObjects) {
-          // Merge objects in the array
+          // Merge objects in the array into a single interface definition
           const subInterfaceName = getUniqueInterfaceName(singularize(fieldKey));
           const mergedFields = mergeObjectArray(val as { [key: string]: JsonValue }[]);
           interfaces.push({
@@ -142,16 +169,39 @@ export function generateTypeScript(
 
       for (const key of Array.from(allKeys)) {
         const isPresentInAll = objects.every((o) => key in o);
-        const typesForKey = new Set<string>();
+        const presentValues = objects
+          .filter((o) => key in o)
+          .map((o) => o[key]);
 
-        for (const obj of objects) {
-          if (key in obj) {
-            typesForKey.add(inferType(obj[key], key));
+        // Check if all present values are non-null objects
+        const objectValues = presentValues.filter(
+          (v): v is { [k: string]: JsonValue } =>
+            v !== null && typeof v === 'object' && !Array.isArray(v)
+        );
+        const hasNull = presentValues.some((v) => v === null);
+        const hasPrimitives = presentValues.some(
+          (v) => v === null || typeof v !== 'object' || Array.isArray(v)
+        );
+
+        let finalType: string;
+
+        // If all present values are objects (with optional nulls), merge them recursively
+        if (objectValues.length > 0 && !hasPrimitives) {
+          const nestedName = getUniqueInterfaceName(key);
+          const nestedFields = mergeObjectArray(objectValues);
+          interfaces.push({
+            name: nestedName,
+            fields: nestedFields,
+          });
+          finalType = hasNull ? `${nestedName} | null` : nestedName;
+        } else {
+          const typesForKey = new Set<string>();
+          for (const val of presentValues) {
+            typesForKey.add(inferType(val, key));
           }
+          const typeArray = Array.from(typesForKey);
+          finalType = typeArray.length > 0 ? typeArray.join(' | ') : 'unknown';
         }
-
-        const typeArray = Array.from(typesForKey);
-        const finalType = typeArray.length > 0 ? typeArray.join(' | ') : 'unknown';
 
         resultFields.push({
           key,
@@ -222,13 +272,6 @@ export function generateTypeScript(
       error: err instanceof Error ? err.message : 'Failed to generate TypeScript',
     };
   }
-}
-
-function toPascalCase(str: string): string {
-  return str
-    .replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
-    .replace(/^[^a-zA-Z]+/, '')
-    .replace(/^[a-z]/, (chr) => chr.toUpperCase());
 }
 
 function singularize(str: string): string {

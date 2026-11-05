@@ -21,21 +21,14 @@ export function compareJson(leftInput: string, rightInput: string): DiffResult {
   const leftVal = validateJson(leftInput);
   const rightVal = validateJson(rightInput);
 
-  if (!leftVal.isValid || leftVal.parsed === undefined) {
+  // If either or both inputs are invalid, report all errors without early cutoff
+  if (!leftVal.isValid || !rightVal.isValid || leftVal.parsed === undefined || rightVal.parsed === undefined) {
     return {
       isEqual: false,
       changes: [],
       summary: emptySummary,
-      errorLeft: leftVal.error || 'Left JSON is invalid',
-    };
-  }
-
-  if (!rightVal.isValid || rightVal.parsed === undefined) {
-    return {
-      isEqual: false,
-      changes: [],
-      summary: emptySummary,
-      errorRight: rightVal.error || 'Right JSON is invalid',
+      errorLeft: !leftVal.isValid ? (leftVal.error || 'Left JSON is invalid') : undefined,
+      errorRight: !rightVal.isValid ? (rightVal.error || 'Right JSON is invalid') : undefined,
     };
   }
 
@@ -117,7 +110,8 @@ function diffValues(
     const leftObj = left as { [key: string]: JsonValue };
     const rightObj = right as { [key: string]: JsonValue };
 
-    const allKeys = Array.from(new Set([...Object.keys(leftObj), ...Object.keys(rightObj)]));
+    // Deterministic sorted key list
+    const allKeys = Array.from(new Set([...Object.keys(leftObj), ...Object.keys(rightObj)])).sort();
 
     for (const key of allKeys) {
       const keyPath = path ? `${path}.${key}` : key;

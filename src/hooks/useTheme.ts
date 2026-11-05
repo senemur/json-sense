@@ -5,11 +5,16 @@ export type Theme = 'light' | 'dark';
 export function useTheme() {
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === 'undefined') return 'dark';
-    const saved = localStorage.getItem('json-buddy-theme') as Theme | null;
-    if (saved === 'light' || saved === 'dark') {
-      return saved;
+    try {
+      const saved = localStorage.getItem('json-buddy-theme') as Theme | null;
+      if (saved === 'light' || saved === 'dark') {
+        return saved;
+      }
+    } catch {
+      // Ignore localStorage access failure in private mode
     }
-    if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+
+    if (typeof window.matchMedia === 'function') {
       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
     return 'light';
@@ -22,7 +27,12 @@ export function useTheme() {
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem('json-buddy-theme', theme);
+
+    try {
+      localStorage.setItem('json-buddy-theme', theme);
+    } catch {
+      // Ignore localStorage write failure in restricted storage
+    }
   }, [theme]);
 
   const toggleTheme = () => {

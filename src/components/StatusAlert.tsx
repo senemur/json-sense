@@ -54,7 +54,7 @@ export function StatusAlert({
           </div>
           <p className="mt-1 font-mono text-xs break-words">{message}</p>
           {snippet && (
-            <pre className="mt-2 overflow-x-auto rounded bg-black/10 dark:bg-black/30 p-2 font-mono text-xs text-red-900 dark:text-red-200">
+            <pre className="mt-2 max-h-48 overflow-auto break-all rounded bg-black/10 dark:bg-black/30 p-2 font-mono text-xs text-red-900 dark:text-red-200">
               {snippet}
             </pre>
           )}

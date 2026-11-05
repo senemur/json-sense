@@ -11,9 +11,11 @@ interface TreeNodeProps {
 export function TreeNode({
   node,
   depth = 0,
-  initialExpanded = true,
+  initialExpanded,
 }: TreeNodeProps) {
-  const [isExpanded, setIsExpanded] = useState(initialExpanded || depth < 2);
+  const [isExpanded, setIsExpanded] = useState(
+    initialExpanded !== undefined ? initialExpanded : depth < 2
+  );
   const { copied, copy } = useClipboard(1500);
 
   const isContainer = node.type === 'object' || node.type === 'array';

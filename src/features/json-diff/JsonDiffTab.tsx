@@ -131,12 +131,14 @@ export function JsonDiffTab() {
           label="Original (Left)"
           value={leftJson}
           onChange={setLeftJson}
+          isValid={diffResult?.errorLeft ? false : (leftJson.trim() ? true : null)}
           placeholder="Paste original JSON..."
         />
         <TextEditor
           label="Modified (Right)"
           value={rightJson}
           onChange={setRightJson}
+          isValid={diffResult?.errorRight ? false : (rightJson.trim() ? true : null)}
           placeholder="Paste modified JSON..."
         />
       </div>
