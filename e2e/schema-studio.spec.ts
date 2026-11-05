@@ -9,15 +9,14 @@ test.describe('Schema Studio E2E User Flows', () => {
     // Switch to Schema Studio tab
     await page.getByRole('button', { name: /Schema Studio/i }).click();
 
-    // Verify header and Draft-07 badge
+    // Verify header
     await expect(page.getByRole('heading', { name: 'Schema Studio' })).toBeVisible();
-    await expect(page.getByText('Draft-07').first()).toBeVisible();
 
     // Verify sample tabs and controls
     await expect(page.getByRole('button', { name: /Sample 1/ })).toBeVisible();
     await expect(page.getByRole('button', { name: /Sample 2/ })).toBeVisible();
     await expect(page.getByRole('button', { name: '+ Add Sample' })).toBeVisible();
-    await expect(page.getByText('Inferred JSON Schema (Draft-07)')).toBeVisible();
+    await expect(page.getByText('Inferred JSON Schema')).toBeVisible();
   });
 
   test('manages multiple samples and generates inferred schema', async ({ page }) => {

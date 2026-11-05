@@ -13,15 +13,14 @@ describe('SchemaStudioTab Component UI', () => {
     });
   });
 
-  it('renders Schema Studio with banner, sample tabs and inferred Draft-07 schema', () => {
+  it('renders Schema Studio with banner, sample tabs and inferred schema', () => {
     render(<SchemaStudioTab />);
 
     expect(screen.getByText('Schema Studio')).toBeInTheDocument();
-    expect(screen.getByText('Draft-07')).toBeInTheDocument();
     expect(screen.getByText('Sample 1')).toBeInTheDocument();
     expect(screen.getByText('Sample 2')).toBeInTheDocument();
     expect(screen.getByText('+ Add Sample')).toBeInTheDocument();
-    expect(screen.getByText('Inferred JSON Schema (Draft-07)')).toBeInTheDocument();
+    expect(screen.getByText('Inferred JSON Schema')).toBeInTheDocument();
   });
 
   it('allows adding and removing sample tabs', async () => {

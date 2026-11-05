@@ -40,9 +40,6 @@ export function Header({
                 <span className="font-bold text-[#8d2f43] dark:text-[#e6c76e] text-xl tracking-tight">
                   JsonSense
                 </span>
-                <span className="text-[10px] uppercase tracking-wider font-semibold px-1.5 py-0.5 rounded bg-[#8d2f43]/10 text-[#8d2f43] dark:bg-[#8d2f43]/30 dark:text-[#e6c76e] border border-[#8d2f43]/20 dark:border-[#8d2f43]/40">
-                  MVP
-                </span>
               </div>
               <p className="text-xs text-[#8d2f43]/80 dark:text-[#e6c76e]/80 font-medium hidden sm:block">
                 Best Buddy for Json

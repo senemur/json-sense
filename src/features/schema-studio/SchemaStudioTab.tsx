@@ -286,9 +286,6 @@ export function SchemaStudioTab() {
           <div className="flex items-center gap-2">
             <span className="text-xl">📐</span>
             <h2 className="text-lg font-bold text-[#8d2f43] dark:text-[#e6c76e]">Schema Studio</h2>
-            <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded-md bg-[#8d2f43]/10 text-[#8d2f43] dark:bg-[#8d2f43]/30 dark:text-[#e6c76e] border border-[#8d2f43]/20">
-              Draft-07
-            </span>
           </div>
           <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
             Infer standard JSON Schema specifications from single or multiple payloads, and validate target data.
@@ -352,7 +349,7 @@ export function SchemaStudioTab() {
         <div className="text-zinc-500 text-[11px]">
           {activeMode === 'inference'
             ? 'Unified inference analyzes union types, required intersections & integers.'
-            : 'Strict Draft-07 specification validation with JSONPath tracking.'}
+            : 'Strict specification validation with JSONPath tracking.'}
         </div>
       </div>
 
@@ -444,7 +441,7 @@ export function SchemaStudioTab() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200">
-                  Inferred JSON Schema (Draft-07)
+                  Inferred JSON Schema
                 </span>
                 <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
                   Ready
@@ -518,7 +515,7 @@ export function SchemaStudioTab() {
                 onChange={(e) => setValidatorSchemaText(e.target.value)}
                 rows={14}
                 spellCheck={false}
-                placeholder="Enter or paste JSON Schema (Draft-07)..."
+                placeholder="Enter or paste JSON Schema..."
                 className="w-full p-3 font-mono text-xs rounded-xl border border-zinc-300 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[#8d2f43] resize-y"
               />
             </div>
