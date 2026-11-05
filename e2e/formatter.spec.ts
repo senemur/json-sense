@@ -7,7 +7,7 @@ test.describe('JSON Formatter & Minifier User Flows', () => {
 
   test('formats JSON with 2-space indentation', async ({ page }) => {
     const editor = page.getByRole('textbox', { name: 'JSON Input' });
-    const rawJson = '{"app":"JSON Buddy","version":"1.0.0","active":true}';
+    const rawJson = '{"app":"JsonSense","version":"1.0.0","active":true}';
 
     await editor.fill(rawJson);
     await page.getByRole('button', { name: 'Format (2 Spaces)' }).click();
@@ -44,6 +44,6 @@ test.describe('JSON Formatter & Minifier User Flows', () => {
     await expect(editor).toHaveValue('');
 
     await page.getByRole('button', { name: 'Sample' }).click();
-    await expect(editor).toContainText('JSON Buddy');
+    await expect(editor).toContainText('JsonSense');
   });
 });

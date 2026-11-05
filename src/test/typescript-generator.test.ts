@@ -5,7 +5,7 @@ describe('generateTypeScript', () => {
   it('generates interface for simple object', () => {
     const json = JSON.stringify({
       id: 1,
-      name: 'JSON Buddy',
+      name: 'JsonSense',
       isActive: true,
       score: 98.5,
     });

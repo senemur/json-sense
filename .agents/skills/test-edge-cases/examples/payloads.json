@@ -1,7 +1,7 @@
 {
-  "description": "Standard edge-case JSON payloads for testing and benchmarking JSON Buddy",
+  "description": "Standard edge-case JSON payloads for testing and benchmarking JsonSense",
   "primitives": {
-    "string": "Hello, JSON Buddy!",
+    "string": "Hello, JsonSense!",
     "numberInteger": 42,
     "numberFloat": 3.141592653589793,
     "numberScientific": 1.25e-4,

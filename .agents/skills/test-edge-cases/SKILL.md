@@ -1,18 +1,18 @@
 ---
 name: test-edge-cases
 description: >-
-  Systematic edge-case testing, validation, and quality verification skill for JSON Buddy.
+  Systematic edge-case testing, validation, and quality verification skill for JsonSense.
   Use this skill whenever verifying, adding, or modifying JSON processing features,
   running comprehensive edge-case test suites, checking TypeScript inference correctness,
   or testing error handling, clipboard operations, and theme/storage management.
 metadata:
-  author: JSON Buddy Team
+  author: JsonSense Team
   version: 1.0.0
 ---
 
-# JSON Buddy Edge-Case Testing & Verification Skill
+# JsonSense Edge-Case Testing & Verification Skill
 
-This skill provides a standardized, repeatable procedure for testing, validating, and verifying edge-case behaviors across all JSON Buddy core modules and UI features.
+This skill provides a standardized, repeatable procedure for testing, validating, and verifying edge-case behaviors across all JsonSense core modules and UI features.
 
 ## When to Use This Skill
 

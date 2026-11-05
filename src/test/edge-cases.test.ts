@@ -312,7 +312,7 @@ describe('Comprehensive Edge Cases & Correctness', () => {
     });
 
     it('returns null when filter query does not match any key or value', () => {
-      const data = { app: 'JSON Buddy', version: 1 };
+      const data = { app: 'JsonSense', version: 1 };
       const tree = buildTree(data);
       expect(filterTree(tree, 'nonexistent_key_xyz')).toBeNull();
     });
@@ -345,13 +345,13 @@ describe('Comprehensive Edge Cases & Correctness', () => {
       const json = JSON.stringify({
         copyright: '©',
         euro: '€',
-        emoji: '🚀 JSON Buddy',
+        emoji: '🚀 JsonSense',
         newlines: 'Line 1\nLine 2\tTabbed',
       });
 
       const formatted = formatJson(json);
       expect(formatted.success).toBe(true);
-      expect(formatted.output).toContain('🚀 JSON Buddy');
+      expect(formatted.output).toContain('🚀 JsonSense');
       expect(formatted.output).toContain('©');
 
       const minified = minifyJson(formatted.output);

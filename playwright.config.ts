@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * Playwright E2E configuration for JSON Buddy
+ * Playwright E2E configuration for JsonSense
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({

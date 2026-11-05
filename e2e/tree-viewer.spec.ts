@@ -8,7 +8,7 @@ test.describe('JSON Tree Viewer User Flows', () => {
   test('displays nested JSON structures with correct keys and values', async ({ page }) => {
     const editor = page.getByRole('textbox', { name: 'JSON Input' });
     const payload = JSON.stringify({
-      service: 'json-buddy',
+      service: 'jsonsense',
       version: '0.1.0',
       active: true,
       metadata: {
@@ -23,7 +23,7 @@ test.describe('JSON Tree Viewer User Flows', () => {
 
     // Verify presence of keys in the tree
     await expect(page.getByText('service:', { exact: false })).toBeVisible();
-    await expect(page.getByText('"json-buddy"', { exact: false })).toBeVisible();
+    await expect(page.getByText('"jsonsense"', { exact: false })).toBeVisible();
     await expect(page.getByText('version:', { exact: false })).toBeVisible();
     await expect(page.getByText('active:', { exact: false })).toBeVisible();
     await expect(page.getByText('metadata:', { exact: false })).toBeVisible();

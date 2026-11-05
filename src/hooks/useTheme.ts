@@ -6,7 +6,8 @@ export function useTheme() {
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === 'undefined') return 'dark';
     try {
-      const saved = localStorage.getItem('json-buddy-theme') as Theme | null;
+      const saved = (localStorage.getItem('jsonsense-theme') ||
+        localStorage.getItem('json-buddy-theme')) as Theme | null;
       if (saved === 'light' || saved === 'dark') {
         return saved;
       }
@@ -29,7 +30,7 @@ export function useTheme() {
     }
 
     try {
-      localStorage.setItem('json-buddy-theme', theme);
+      localStorage.setItem('jsonsense-theme', theme);
     } catch {
       // Ignore localStorage write failure in restricted storage
     }

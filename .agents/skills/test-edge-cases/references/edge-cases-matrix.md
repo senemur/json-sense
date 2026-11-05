@@ -1,6 +1,6 @@
-# JSON Buddy Edge-Cases Matrix & Quality Checklist
+# JsonSense Edge-Cases Matrix & Quality Checklist
 
-This reference document defines the required test scenarios, inputs, and expected behaviors across all features of JSON Buddy.
+This reference document defines the required test scenarios, inputs, and expected behaviors across all features of JsonSense.
 
 ---
 

@@ -60,10 +60,10 @@ export function SmartRepairPanel({
     <div
       role="region"
       aria-label="Smart JSON Repair Review"
-      className="flex flex-col gap-3 p-4 rounded-xl border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/40 dark:bg-indigo-950/20 shadow-sm"
+      className="flex flex-col gap-3 p-4 rounded-xl border border-[#8d2f43]/25 dark:border-[#8d2f43]/40 bg-[#f7f3f3] dark:bg-[#190c10]/80 shadow-sm"
     >
       {/* Header and Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-indigo-200/60 dark:border-indigo-900/60">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#8d2f43]/15 dark:border-[#8d2f43]/30">
         <div className="flex items-center gap-2.5">
           <span className="text-xl">✨</span>
           <div>
@@ -72,7 +72,7 @@ export function SmartRepairPanel({
                 Smart Repair Results
               </h3>
               {result.success && result.changed && (
-                <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#8d2f43]/10 text-[#8d2f43] dark:bg-[#8d2f43]/30 dark:text-[#e6c76e] border border-[#8d2f43]/20 dark:border-[#8d2f43]/40">
                   ✓ {result.fixes.length} {result.fixes.length === 1 ? 'fix' : 'fixes'} applied
                 </span>
               )}
@@ -89,7 +89,7 @@ export function SmartRepairPanel({
               <button
                 type="button"
                 onClick={() => onApply(result.output)}
-                className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs shadow-sm transition cursor-pointer flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-lg bg-[#8d2f43] hover:bg-[#732334] text-white font-medium text-xs shadow-sm ring-1 ring-[#e6c76e]/40 transition cursor-pointer flex items-center gap-1.5"
               >
                 <span>✓</span>
                 <span>Apply to Editor</span>
@@ -98,7 +98,7 @@ export function SmartRepairPanel({
               <button
                 type="button"
                 onClick={() => copy(result.output)}
-                className="px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-xs font-medium transition cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800 hover:bg-[#8d2f43]/10 dark:hover:bg-[#8d2f43]/20 text-xs font-medium transition cursor-pointer"
               >
                 {copied ? '✓ Copied' : 'Copy Repaired'}
               </button>

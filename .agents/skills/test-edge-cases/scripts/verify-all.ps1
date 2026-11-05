@@ -1,8 +1,8 @@
-# PowerShell script to execute the complete verification pipeline for JSON Buddy
+# PowerShell script to execute the complete verification pipeline for JsonSense
 $ErrorActionPreference = "Stop"
 
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host " Running JSON Buddy Edge Verification " -ForegroundColor Cyan
+Write-Host "  Running JsonSense Edge Verification   " -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 
 Write-Host "`n[1/4] Running ESLint..." -ForegroundColor Yellow

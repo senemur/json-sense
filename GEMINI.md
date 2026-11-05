@@ -1,8 +1,8 @@
-# JSON Buddy - Gemini Instructions
+# JSON Sense - Instructions
 
 ## 1. Project Overview
 
-JSON Buddy is a browser-based developer tool for working with JSON data.
+JSON Sense is a browser-based developer tool for working with JSON data.
 
 The application helps developers:
 
@@ -78,7 +78,7 @@ Create them when the corresponding feature is implemented.
 
 ## 6. Privacy
 
-JSON Buddy processes JSON data locally in the browser.
+JsonSense processes JSON data locally in the browser.
 
 Do not send user-provided JSON to external APIs or services.
 

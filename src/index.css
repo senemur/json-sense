@@ -2,8 +2,22 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --color-crimson: #8d2f43;
+  --color-crimson-hover: #732334;
+  --color-crimson-light: #ab3e55;
+  --color-orange-gold: #e6c76e;
+  --color-orange-gold-hover: #d5b558;
+  --color-light-red: #f7f3f3;
+  --color-dark-surface: #190c10;
+  --color-dark-bg: #120709;
+}
+
 :root {
   color-scheme: light dark;
+  --color-brand-crimson: #8d2f43;
+  --color-brand-orange: #e6c76e;
+  --color-brand-light-red: #f7f3f3;
 }
 
 body {

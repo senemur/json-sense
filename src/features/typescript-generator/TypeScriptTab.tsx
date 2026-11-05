@@ -54,7 +54,7 @@ export function TypeScriptTab({ json }: TypeScriptTabProps) {
           <button
             type="button"
             onClick={() => copy(generated.code)}
-            className="px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-medium text-xs hover:bg-indigo-700 transition shadow-sm cursor-pointer"
+            className="px-3 py-1.5 rounded-lg bg-[#8d2f43] hover:bg-[#732334] text-white font-medium text-xs transition shadow-sm cursor-pointer"
           >
             {copied ? '✓ Copied Interfaces' : 'Copy TypeScript'}
           </button>

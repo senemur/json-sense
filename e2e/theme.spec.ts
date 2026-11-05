@@ -21,7 +21,7 @@ test.describe('Theme Management & Persistence User Flows', () => {
       await expect(page.getByRole('button', { name: 'Switch to dark mode' })).toBeVisible();
 
       // Check localStorage persistence
-      const savedTheme = await page.evaluate(() => localStorage.getItem('json-buddy-theme'));
+      const savedTheme = await page.evaluate(() => localStorage.getItem('jsonsense-theme'));
       expect(savedTheme).toBe('light');
 
       // Reload page and verify persistence
@@ -39,7 +39,7 @@ test.describe('Theme Management & Persistence User Flows', () => {
       await expect(page.getByRole('button', { name: 'Switch to light mode' })).toBeVisible();
 
       // Check localStorage persistence
-      const savedTheme = await page.evaluate(() => localStorage.getItem('json-buddy-theme'));
+      const savedTheme = await page.evaluate(() => localStorage.getItem('jsonsense-theme'));
       expect(savedTheme).toBe('dark');
 
       // Reload page and verify persistence

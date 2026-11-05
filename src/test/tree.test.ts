@@ -13,7 +13,7 @@ describe('Tree utilities', () => {
 
   it('builds recursive tree for nested objects and arrays', () => {
     const data = {
-      project: 'JSON Buddy',
+      project: 'JsonSense',
       version: 1,
       tags: ['json', 'tools'],
       meta: {

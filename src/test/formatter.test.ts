@@ -40,10 +40,10 @@ describe('formatJson', () => {
 
 describe('minifyJson', () => {
   it('minifies multiline formatted JSON', () => {
-    const formatted = '{\n  "name": "JSON Buddy",\n  "version": 1\n}';
+    const formatted = '{\n  "name": "JsonSense",\n  "version": 1\n}';
     const result = minifyJson(formatted);
     expect(result.success).toBe(true);
-    expect(result.output).toBe('{"name":"JSON Buddy","version":1}');
+    expect(result.output).toBe('{"name":"JsonSense","version":1}');
   });
 
   it('handles empty input gracefully', () => {

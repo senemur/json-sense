@@ -1,75 +1,57 @@
-# React + TypeScript + Vite
+# JsonSense — Best Buddy for JSON
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![JsonSense Logo](./public/logo.png)
 
-Currently, two official plugins are available:
+**JsonSense** is a fast, reliable, and 100% private developer tool for inspecting, formatting, validating, comparing, repairing, and transforming JSON data directly in your browser.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+> **Zero Network Requests &bull; 100% Client-Side &bull; Data Never Leaves Your Browser**
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+- **Format & Minify:** 2-space, 4-space, and tab indentation with instant byte, character, and line counters.
+- **Syntax Validator:** Friendly syntax error diagnostic with line, column, and error pointer snippet.
+- **Smart JSON Repair:** Safely fixes unquoted keys, trailing commas, single quotes, comments, Python/JS literals, and unclosed containers without mutating string contents.
+- **Tree Viewer:** Interactive, collapsible hierarchical explorer with instant keyword filtering.
+- **JSON to TypeScript:** Generates clean, idiomatic TypeScript interfaces with configurable root names and `export` toggles.
+- **JSON Diff:** Side-by-side comparison engine highlighting added, removed, and modified values.
+- **Light & Dark Mode:** Built with the signature JsonSense Crimson (`#8d2f43`), Orange Gold (`#e6c76e`), and Light Red (`#f7f3f3`) palette.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **React 19**
+- **TypeScript**
+- **Vite**
+- **Tailwind CSS v4**
+- **Vitest & React Testing Library**
+- **Playwright**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
 
+## Getting Started
+
+```bash
+# Install dependencies
+npm install
+
+# Start local development server
+npm run dev
+
+# Run unit & component tests
+npm test
+
+# Run Playwright E2E tests
+npm run test:e2e
+
+# Run production build
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## License
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+MIT &copy; 2026 JsonSense Team

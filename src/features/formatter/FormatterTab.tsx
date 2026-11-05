@@ -14,7 +14,8 @@ interface FormatterTabProps {
 
 const SAMPLE_JSON = JSON.stringify(
   {
-    app: 'JSON Buddy',
+    app: 'JsonSense',
+    tagline: 'Best Buddy for Json',
     version: '0.1.0',
     description: 'Privacy-focused developer JSON toolkit',
     features: ['Formatter', 'Validator', 'Tree Viewer', 'TypeScript Generator', 'JSON Diff', 'Smart Repair'],
@@ -109,7 +110,7 @@ export function FormatterTab({ json, onChangeJson }: FormatterTabProps) {
           <button
             type="button"
             onClick={() => handleFormat(2)}
-            className="px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-medium text-xs sm:text-sm hover:bg-indigo-700 transition shadow-sm cursor-pointer"
+            className="px-3 py-1.5 rounded-lg bg-[#8d2f43] hover:bg-[#732334] text-white font-medium text-xs sm:text-sm transition shadow-sm cursor-pointer"
           >
             Format (2 Spaces)
           </button>
@@ -139,8 +140,8 @@ export function FormatterTab({ json, onChangeJson }: FormatterTabProps) {
             onClick={handleSmartRepair}
             className={`px-3 py-1.5 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 cursor-pointer ${
               validation && !validation.isValid
-                ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-sm ring-2 ring-amber-500/30'
-                : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-700'
+                ? 'bg-[#8d2f43] hover:bg-[#732334] text-[#e6c76e] shadow-sm ring-2 ring-[#e6c76e]/50'
+                : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:bg-[#8d2f43]/10 dark:hover:bg-[#8d2f43]/20'
             }`}
           >
             <span>✨</span>
@@ -200,8 +201,8 @@ export function FormatterTab({ json, onChangeJson }: FormatterTabProps) {
             column={validation.column}
             snippet={validation.snippet}
           />
-          <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/70 dark:bg-amber-950/30 text-xs">
-            <div className="flex items-center gap-2 text-amber-900 dark:text-amber-200">
+          <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl border border-[#8d2f43]/25 dark:border-[#8d2f43]/40 bg-[#f7f3f3] dark:bg-[#190c10]/70 text-xs">
+            <div className="flex items-center gap-2 text-[#8d2f43] dark:text-[#e6c76e]">
               <span className="text-sm">💡</span>
               <span>
                 Detected syntax issues. Smart Repair can automatically fix unquoted keys, trailing commas, single quotes, or comments.
@@ -210,7 +211,7 @@ export function FormatterTab({ json, onChangeJson }: FormatterTabProps) {
             <button
               type="button"
               onClick={handleSmartRepair}
-              className="px-3 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-medium shadow-sm transition whitespace-nowrap cursor-pointer flex items-center gap-1"
+              className="px-3 py-1 rounded-lg bg-[#8d2f43] hover:bg-[#732334] text-[#e6c76e] font-medium shadow-sm transition whitespace-nowrap cursor-pointer flex items-center gap-1"
             >
               <span>✨</span>
               <span>Repair JSON Now</span>

@@ -6,7 +6,7 @@ import type { DiffEntry } from '../../types/json';
 
 const SAMPLE_LEFT = JSON.stringify(
   {
-    name: 'JSON Buddy',
+    name: 'JsonSense',
     version: '0.1.0',
     features: ['format', 'validate'],
     settings: {
@@ -21,7 +21,7 @@ const SAMPLE_LEFT = JSON.stringify(
 
 const SAMPLE_RIGHT = JSON.stringify(
   {
-    name: 'JSON Buddy Pro',
+    name: 'JsonSense Pro',
     version: '0.2.0',
     features: ['format', 'validate', 'tree-view', 'diff'],
     settings: {
@@ -69,7 +69,7 @@ export function JsonDiffTab() {
           <button
             type="button"
             onClick={loadSamples}
-            className="px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-medium text-xs hover:bg-indigo-700 transition shadow-sm cursor-pointer"
+            className="px-3 py-1.5 rounded-lg bg-[#8d2f43] hover:bg-[#732334] text-white font-medium text-xs transition shadow-sm cursor-pointer"
           >
             Load Comparison Sample
           </button>

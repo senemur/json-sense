@@ -13,7 +13,7 @@ describe('useTheme hook & LocalStorage management', () => {
   });
 
   it('initializes with saved theme from localStorage when valid', () => {
-    localStorage.setItem('json-buddy-theme', 'light');
+    localStorage.setItem('jsonsense-theme', 'light');
 
     const { result } = renderHook(() => useTheme());
     expect(result.current.theme).toBe('light');
@@ -21,11 +21,19 @@ describe('useTheme hook & LocalStorage management', () => {
   });
 
   it('initializes with dark theme when saved in localStorage', () => {
-    localStorage.setItem('json-buddy-theme', 'dark');
+    localStorage.setItem('jsonsense-theme', 'dark');
 
     const { result } = renderHook(() => useTheme());
     expect(result.current.theme).toBe('dark');
     expect(document.documentElement.classList.contains('dark')).toBe(true);
+  });
+
+  it('supports backward-compatibility fallback from legacy json-buddy-theme key', () => {
+    localStorage.setItem('json-buddy-theme', 'light');
+
+    const { result } = renderHook(() => useTheme());
+    expect(result.current.theme).toBe('light');
+    expect(document.documentElement.classList.contains('dark')).toBe(false);
   });
 
   it('falls back to system dark mode preference when localStorage is empty', () => {
@@ -46,7 +54,7 @@ describe('useTheme hook & LocalStorage management', () => {
   });
 
   it('toggles theme from dark to light and updates DOM and storage', () => {
-    localStorage.setItem('json-buddy-theme', 'dark');
+    localStorage.setItem('jsonsense-theme', 'dark');
     const { result } = renderHook(() => useTheme());
 
     act(() => {
@@ -54,7 +62,7 @@ describe('useTheme hook & LocalStorage management', () => {
     });
 
     expect(result.current.theme).toBe('light');
-    expect(localStorage.getItem('json-buddy-theme')).toBe('light');
+    expect(localStorage.getItem('jsonsense-theme')).toBe('light');
     expect(document.documentElement.classList.contains('dark')).toBe(false);
 
     // Toggle back to dark
@@ -62,7 +70,7 @@ describe('useTheme hook & LocalStorage management', () => {
       result.current.toggleTheme();
     });
     expect(result.current.theme).toBe('dark');
-    expect(localStorage.getItem('json-buddy-theme')).toBe('dark');
+    expect(localStorage.getItem('jsonsense-theme')).toBe('dark');
     expect(document.documentElement.classList.contains('dark')).toBe(true);
   });
 

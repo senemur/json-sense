@@ -3,11 +3,11 @@ import { validateJson } from '../lib/validator';
 
 describe('validateJson', () => {
   it('returns valid for valid JSON object', () => {
-    const input = '{"name": "JSON Buddy", "stars": 100, "active": true}';
+    const input = '{"name": "JsonSense", "stars": 100, "active": true}';
     const result = validateJson(input);
     expect(result.isValid).toBe(true);
     expect(result.error).toBeUndefined();
-    expect(result.parsed).toEqual({ name: 'JSON Buddy', stars: 100, active: true });
+    expect(result.parsed).toEqual({ name: 'JsonSense', stars: 100, active: true });
   });
 
   it('returns valid for valid arrays and primitives', () => {

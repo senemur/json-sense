@@ -10,7 +10,7 @@ describe('App component & UI interactions', () => {
 
   it('renders application header, brand, and default formatter tab', () => {
     render(<App />);
-    expect(screen.getByText('JSON Buddy')).toBeInTheDocument();
+    expect(screen.getByText('JsonSense')).toBeInTheDocument();
     expect(screen.getByText('100% In-Browser & Private')).toBeInTheDocument();
     expect(screen.getByText('Format (2 Spaces)')).toBeInTheDocument();
     expect(screen.getByText('Minify')).toBeInTheDocument();
@@ -23,7 +23,7 @@ describe('App component & UI interactions', () => {
 
     // Initial click toggles theme
     fireEvent.click(themeBtn);
-    expect(localStorage.getItem('json-buddy-theme')).toBeTruthy();
+    expect(localStorage.getItem('jsonsense-theme')).toBeTruthy();
   });
 
   it('formats JSON with 2 spaces on button click', async () => {

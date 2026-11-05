@@ -3,8 +3,8 @@ import { compareJson } from '../lib/diff';
 
 describe('compareJson', () => {
   it('returns isEqual: true for identical objects', () => {
-    const left = '{"name": "JSON Buddy", "v": 1}';
-    const right = '{"name": "JSON Buddy", "v": 1}';
+    const left = '{"name": "JsonSense", "v": 1}';
+    const right = '{"name": "JsonSense", "v": 1}';
     const result = compareJson(left, right);
     expect(result.isEqual).toBe(true);
     expect(result.summary.added).toBe(0);
@@ -13,8 +13,8 @@ describe('compareJson', () => {
   });
 
   it('detects added keys in right object', () => {
-    const left = '{"name": "JSON Buddy"}';
-    const right = '{"name": "JSON Buddy", "isNew": true}';
+    const left = '{"name": "JsonSense"}';
+    const right = '{"name": "JsonSense", "isNew": true}';
     const result = compareJson(left, right);
     expect(result.isEqual).toBe(false);
     expect(result.summary.added).toBe(1);
@@ -24,8 +24,8 @@ describe('compareJson', () => {
   });
 
   it('detects removed keys in right object', () => {
-    const left = '{"name": "JSON Buddy", "deprecated": true}';
-    const right = '{"name": "JSON Buddy"}';
+    const left = '{"name": "JsonSense", "deprecated": true}';
+    const right = '{"name": "JsonSense"}';
     const result = compareJson(left, right);
     expect(result.isEqual).toBe(false);
     expect(result.summary.removed).toBe(1);

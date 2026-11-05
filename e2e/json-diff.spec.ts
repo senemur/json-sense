@@ -11,13 +11,13 @@ test.describe('JSON Diff Comparison User Flows', () => {
     const rightEditor = page.getByRole('textbox', { name: 'Modified (Right)' });
 
     const originalJson = JSON.stringify({
-      appName: 'JSON Buddy',
+      appName: 'JsonSense',
       version: 1,
       deprecatedField: 'old',
     });
 
     const modifiedJson = JSON.stringify({
-      appName: 'JSON Buddy',
+      appName: 'JsonSense',
       version: 2,
       newField: 'fresh',
     });

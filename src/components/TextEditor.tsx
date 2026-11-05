@@ -113,7 +113,7 @@ export function TextEditor({
           readOnly={readOnly}
           aria-label={label || 'JSON Editor'}
           spellCheck={false}
-          className="w-full h-full p-3 font-mono text-xs sm:text-sm bg-transparent text-zinc-900 dark:text-zinc-100 resize-none focus:outline-none focus:ring-1 focus:ring-indigo-500/50 leading-relaxed"
+          className="w-full h-full p-3 font-mono text-xs sm:text-sm bg-transparent text-zinc-900 dark:text-zinc-100 resize-none focus:outline-none focus:ring-1 focus:ring-[#8d2f43]/50 leading-relaxed"
         />
       </div>
 

@@ -3,7 +3,7 @@ import { repairJson } from '../lib/repair';
 
 describe('Smart JSON Repair', () => {
   it('does not alter already valid JSON', () => {
-    const validJson = JSON.stringify({ name: 'JSON Buddy', stars: 100, active: true }, null, 2);
+    const validJson = JSON.stringify({ name: 'JsonSense', stars: 100, active: true }, null, 2);
     const result = repairJson(validJson);
 
     expect(result.success).toBe(true);
