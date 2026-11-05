@@ -181,10 +181,10 @@ Schema Studio supports a robust, browser-native subset of the JSON Schema (Draft
 
 ```bash
 # Clone the repository
-git clone https://github.com/senemur/json-buddy.git
+git clone https://github.com/senemur/json-sense.git
 
 # Navigate into project directory
-cd json-buddy
+cd json-sense
 
 # Install dependencies from lockfile
 npm ci
