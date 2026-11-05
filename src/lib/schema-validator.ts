@@ -55,7 +55,7 @@ function checkTypeMatch(val: JsonValue, expectedType: string): boolean {
 }
 
 /**
- * Validates a single JSON value node against a subschema.
+ * Validates a single JSON value node against a subschema according to Draft-07.
  */
 function validateNode(
   data: JsonValue,
@@ -174,7 +174,7 @@ function validateNode(
           });
         }
       } catch {
-        // Ignore invalid regex patterns in user schema
+        // Safe handling: ignore invalid regex syntax in user schema
       }
     }
   }
@@ -199,6 +199,36 @@ function validateNode(
         received: `${data}`,
       });
     }
+    if (typeof s.exclusiveMinimum === 'number' && data <= s.exclusiveMinimum) {
+      errors.push({
+        path,
+        keyword: 'exclusiveMinimum',
+        message: `Number ${data} must be strictly greater than exclusiveMinimum ${s.exclusiveMinimum}.`,
+        expected: `> ${s.exclusiveMinimum}`,
+        received: `${data}`,
+      });
+    }
+    if (typeof s.exclusiveMaximum === 'number' && data >= s.exclusiveMaximum) {
+      errors.push({
+        path,
+        keyword: 'exclusiveMaximum',
+        message: `Number ${data} must be strictly less than exclusiveMaximum ${s.exclusiveMaximum}.`,
+        expected: `< ${s.exclusiveMaximum}`,
+        received: `${data}`,
+      });
+    }
+    if (typeof s.multipleOf === 'number' && s.multipleOf > 0) {
+      const remainder = data / s.multipleOf;
+      if (Math.abs(Math.round(remainder) - remainder) > 1e-10) {
+        errors.push({
+          path,
+          keyword: 'multipleOf',
+          message: `Number ${data} is not a multiple of ${s.multipleOf}.`,
+          expected: `multiple of ${s.multipleOf}`,
+          received: `${data}`,
+        });
+      }
+    }
   }
 
   // 6. Array constraints & items
@@ -222,12 +252,28 @@ function validateNode(
       });
     }
 
-    if (s.items) {
-      if (typeof s.items === 'object' && !Array.isArray(s.items)) {
-        data.forEach((item, idx) => {
-          validateNode(item, s.items, formatJsonPath(path, idx), errors);
-        });
-      } else if (Array.isArray(s.items)) {
+    if (s.uniqueItems === true) {
+      let hasDuplicates = false;
+      for (let i = 0; i < data.length; i++) {
+        for (let j = i + 1; j < data.length; j++) {
+          if (isDeepEqual(data[i], data[j])) {
+            hasDuplicates = true;
+            errors.push({
+              path: formatJsonPath(path, j),
+              keyword: 'uniqueItems',
+              message: `Array items must be unique; duplicate item found at index ${j} matching index ${i}.`,
+              expected: 'unique items',
+              received: `duplicate of item at index ${i}`,
+            });
+            break;
+          }
+        }
+        if (hasDuplicates) break;
+      }
+    }
+
+    if (s.items !== undefined) {
+      if (Array.isArray(s.items)) {
         // Tuple validation
         const tupleSchemas = s.items as unknown[];
         data.forEach((item, idx) => {
@@ -245,6 +291,28 @@ function validateNode(
             validateNode(item, s.additionalItems, formatJsonPath(path, idx), errors);
           }
         });
+      } else {
+        // Single schema (object or boolean) applies to all items
+        data.forEach((item, idx) => {
+          validateNode(item, s.items, formatJsonPath(path, idx), errors);
+        });
+      }
+    }
+
+    if (s.contains !== undefined) {
+      const anyContains = data.some((item) => {
+        const itemErrors: SchemaValidationError[] = [];
+        validateNode(item, s.contains, path, itemErrors);
+        return itemErrors.length === 0;
+      });
+      if (!anyContains) {
+        errors.push({
+          path,
+          keyword: 'contains',
+          message: 'Array does not contain any item that matches the "contains" subschema.',
+          expected: 'at least 1 matching item',
+          received: '0 matching items',
+        });
       }
     }
   }
@@ -252,10 +320,48 @@ function validateNode(
   // 7. Object constraints & properties
   if (data !== null && typeof data === 'object' && !Array.isArray(data)) {
     const obj = data as Record<string, JsonValue>;
+    const objKeys = Object.keys(obj).sort();
 
-    // Required fields check
+    // minProperties & maxProperties
+    if (typeof s.minProperties === 'number' && objKeys.length < s.minProperties) {
+      errors.push({
+        path,
+        keyword: 'minProperties',
+        message: `Object has ${objKeys.length} properties, but minimum required is ${s.minProperties}.`,
+        expected: `>= ${s.minProperties}`,
+        received: `${objKeys.length}`,
+      });
+    }
+    if (typeof s.maxProperties === 'number' && objKeys.length > s.maxProperties) {
+      errors.push({
+        path,
+        keyword: 'maxProperties',
+        message: `Object has ${objKeys.length} properties, exceeding maximum allowed of ${s.maxProperties}.`,
+        expected: `<= ${s.maxProperties}`,
+        received: `${objKeys.length}`,
+      });
+    }
+
+    // propertyNames check
+    if (s.propertyNames !== undefined) {
+      objKeys.forEach((key) => {
+        const keyErrors: SchemaValidationError[] = [];
+        validateNode(key, s.propertyNames, formatJsonPath(path, key), keyErrors);
+        if (keyErrors.length > 0) {
+          errors.push({
+            path: formatJsonPath(path, key),
+            keyword: 'propertyNames',
+            message: `Property name "${key}" does not satisfy propertyNames schema.`,
+            expected: 'valid property name',
+            received: key,
+          });
+        }
+      });
+    }
+
+    // Required fields check (sorted for determinism)
     if (Array.isArray(s.required)) {
-      const requiredKeys = s.required as string[];
+      const requiredKeys = (s.required as string[]).slice().sort();
       requiredKeys.forEach((key) => {
         if (!Object.prototype.hasOwnProperty.call(obj, key) || obj[key] === undefined) {
           errors.push({
@@ -269,13 +375,13 @@ function validateNode(
       });
     }
 
-    // Properties check
+    // Properties check (sorted for determinism)
     const propSchemas =
       typeof s.properties === 'object' && s.properties !== null
         ? (s.properties as Record<string, unknown>)
         : {};
 
-    Object.keys(obj).forEach((propKey) => {
+    objKeys.forEach((propKey) => {
       const propValue = obj[propKey];
       const propPath = formatJsonPath(path, propKey);
 
@@ -295,7 +401,7 @@ function validateNode(
     });
   }
 
-  // 8. Logical combinators
+  // 8. Logical combinators: anyOf, oneOf, allOf, not
   if (Array.isArray(s.anyOf)) {
     const branches = s.anyOf as unknown[];
     const anyMatches = branches.some((branchSchema) => {
@@ -339,6 +445,20 @@ function validateNode(
     branches.forEach((branchSchema) => {
       validateNode(data, branchSchema, path, errors);
     });
+  }
+
+  if (s.not !== undefined) {
+    const notErrors: SchemaValidationError[] = [];
+    validateNode(data, s.not, path, notErrors);
+    if (notErrors.length === 0) {
+      errors.push({
+        path,
+        keyword: 'not',
+        message: 'Value must not validate against schema defined in "not".',
+        expected: 'subschema to fail validation',
+        received: 'subschema passed',
+      });
+    }
   }
 }
 

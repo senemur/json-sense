@@ -22,6 +22,30 @@
 
 ---
 
+## JSON Schema Draft-07 Conformance & Specification Coverage
+
+Schema Studio executes **100% in-browser** with zero external dependencies and zero network resolution to preserve complete data privacy.
+
+### Supported Draft-07 Specification Subset:
+- **Type System:** `type` (`string`, `number`, `integer`, `boolean`, `null`, `object`, `array`, and union type arrays e.g. `["integer", "string"]`). Mathematical integer precision verified.
+- **Object Keywords:** `properties`, `required`, `additionalProperties` (boolean and schema), `minProperties`, `maxProperties`, `propertyNames`.
+- **Array Keywords:** `items` (single schema, boolean, and tuple form), `additionalItems`, `contains`, `minItems`, `maxItems`, `uniqueItems` (deep equality check for primitives, nested objects, and arrays).
+- **Numeric Limits:** `minimum`, `maximum`, `exclusiveMinimum` (Draft-07 numeric limit), `exclusiveMaximum` (Draft-07 numeric limit), `multipleOf`.
+- **String Constraints:** `minLength`, `maxLength`, `pattern` (safe execution avoiding crash on invalid regex).
+- **Value Matching:** `enum`, `const` (deep structural equality).
+- **Logical Combinators:** `anyOf` (at least 1 match), `oneOf` (strictly 1 match), `allOf` (all branches match), `not` (fails if subschema matches).
+- **Boolean Schemas:** Full Draft-07 support for `true` (unconditional pass) and `false` (unconditional fail).
+- **JSONPath & Determinism:** Exact JSONPath generation on all failure diagnostics, with deterministic error ordering independent of object property insertion order.
+
+### Unsupported Draft-07 Features (Client-Side Privacy Boundaries):
+- **`$ref` and `$id`:** Remote and local JSON pointer dereferencing is omitted to ensure zero network requests and prevent SSRF/loop hazards.
+- **`definitions` / `$defs`:** Anchor dictionaries for `$ref` resolution are not evaluated.
+- **`dependencies`:** Property and schema dependencies are not evaluated.
+- **`format`:** Semantic format strings (e.g. `date-time`, `email`, `ipv4`) are treated as Draft-07 annotations, not assertions.
+- **Recursive Schemas:** Self-referencing schemas requiring `$ref` traversal are not supported.
+
+---
+
 ## Tech Stack
 
 - **React 19**

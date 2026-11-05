@@ -364,7 +364,7 @@ export function SchemaStudioTab() {
             <div className="flex flex-wrap items-center justify-between gap-2">
               {/* Sample Tabs */}
               <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
-                {samples.map((s, idx) => (
+                {samples.map((s) => (
                   <button
                     key={s.id}
                     type="button"
