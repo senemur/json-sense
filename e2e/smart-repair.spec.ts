@@ -64,4 +64,39 @@ test.describe('Smart JSON Repair E2E User Flows', () => {
     // Since already valid, no broken review panel is shown and valid status remains
     await expect(page.getByText('✓ Valid JSON Syntax')).toBeVisible();
   });
+
+  test('safely auto-closes unclosed containers at EOF ({"users": [{"id": 1)', async ({ page }) => {
+    const editor = page.getByRole('textbox', { name: 'JSON Input' });
+    await editor.fill('{"users": [{"id": 1');
+
+    await page.getByRole('button', { name: 'Smart Repair' }).click();
+    await expect(page.getByRole('region', { name: 'Smart JSON Repair Review' })).toBeVisible();
+
+    await page.getByRole('button', { name: 'Apply to Editor' }).click();
+    await expect(page.getByText('✓ Valid JSON Syntax')).toBeVisible();
+    await expect(editor).toContainText('"users"');
+    await expect(editor).toContainText('"id": 1');
+  });
+
+  test('safely rejects mismatched brackets ({"users": [{"id": 1]) with failure diagnostic', async ({ page }) => {
+    const editor = page.getByRole('textbox', { name: 'JSON Input' });
+    await editor.fill('{"users": [{"id": 1]');
+
+    await page.getByRole('button', { name: 'Smart Repair' }).click();
+    await expect(page.getByText('Unable to Safely Auto-Repair JSON')).toBeVisible();
+    await expect(page.getByText(/Mismatched closing bracket '\]'/)).toBeVisible();
+
+    // Should NOT allow applying invalid JSON
+    await expect(page.getByRole('button', { name: 'Apply to Editor' })).not.toBeVisible();
+  });
+
+  test('displays review-advised alert and confidence badge for undefined -> null conversion', async ({ page }) => {
+    const editor = page.getByRole('textbox', { name: 'JSON Input' });
+    await editor.fill('{ "status": undefined }');
+
+    await page.getByRole('button', { name: 'Smart Repair' }).click();
+    await expect(page.getByRole('region', { name: 'Smart JSON Repair Review' })).toBeVisible();
+    await expect(page.getByText(/Review Advised: Semantic Adjustments Detected/i)).toBeVisible();
+    await expect(page.getByText('Review', { exact: true })).toBeVisible();
+  });
 });

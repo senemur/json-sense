@@ -73,11 +73,16 @@ export type RepairFixType =
   | 'escaped-char'
   | 'number-format';
 
+export type RepairConfidence = 'high' | 'medium' | 'low';
+
 export interface RepairFix {
   id: string;
   type: RepairFixType;
   description: string;
   line?: number;
+  column?: number;
+  confidence: RepairConfidence;
+  explanation?: string;
 }
 
 export interface RepairOptions {
