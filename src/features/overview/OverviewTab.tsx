@@ -126,7 +126,7 @@ export function OverviewTab({ onNavigateToTab }: OverviewTabProps) {
               className="px-4 py-2.5 rounded-xl bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs sm:text-sm font-semibold border border-zinc-300 dark:border-zinc-700 shadow-sm transition cursor-pointer flex items-center gap-2"
             >
               <Code2 className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />
-              <span>Launch Format &amp; Validate</span>
+              <span>Launch Editor</span>
             </button>
 
             {/* Launch Schema Studio */}
@@ -136,7 +136,7 @@ export function OverviewTab({ onNavigateToTab }: OverviewTabProps) {
               className="px-4 py-2.5 rounded-xl bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs sm:text-sm font-semibold border border-zinc-300 dark:border-zinc-700 shadow-sm transition cursor-pointer flex items-center gap-2"
             >
               <Boxes className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-              <span>Schema Studio</span>
+              <span>Open Studio</span>
             </button>
           </div>
         </div>
@@ -417,7 +417,7 @@ export function OverviewTab({ onNavigateToTab }: OverviewTabProps) {
             <span className="text-[10px] font-mono font-bold text-[#8d2f43] dark:text-[#e6c76e] uppercase tracking-wider">
               Step 4
             </span>
-            <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">Schema Studio</h4>
+            <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">Schema Inference</h4>
             <p className="text-[11px] text-zinc-600 dark:text-zinc-400 leading-normal">
               Infer unified types, integer promotion, and required properties from multi-sample sets.
             </p>

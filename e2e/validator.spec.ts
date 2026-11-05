@@ -3,6 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('JSON Validator User Flows', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
+    await page.getByRole('button', { name: 'Format & Validate' }).click();
   });
 
   test('displays clear error diagnostic when invalid JSON is provided', async ({ page }) => {

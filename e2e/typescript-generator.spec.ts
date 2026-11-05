@@ -3,6 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('JSON to TypeScript Generator User Flows', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
+    await page.getByRole('button', { name: 'Format & Validate' }).click();
   });
 
   test('converts JSON object into clean TypeScript interfaces', async ({ page }) => {

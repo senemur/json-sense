@@ -37,8 +37,12 @@ const INITIAL_JSON = JSON.stringify(
   2
 );
 
-export function App() {
-  const [activeTab, setActiveTab] = useState<TabId>('formatter');
+interface AppProps {
+  defaultTab?: TabId;
+}
+
+export function App({ defaultTab = 'overview' }: AppProps = {}) {
+  const [activeTab, setActiveTab] = useState<TabId>(defaultTab);
   const [jsonText, setJsonText] = useState<string>(INITIAL_JSON);
   const { theme, toggleTheme } = useTheme();
 

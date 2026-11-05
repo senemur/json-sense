@@ -22,6 +22,7 @@ test.describe('JSON Inspector E2E User Flows', () => {
 
   test('analyzes prompt example with type inconsistency, empty string, and null value', async ({ page }) => {
     // First, fill the Formatter tab with the prompt example
+    await page.getByRole('button', { name: 'Format & Validate' }).click();
     const editor = page.getByRole('textbox', { name: 'JSON Input' });
     const promptData = JSON.stringify(
       {
@@ -79,6 +80,7 @@ test.describe('JSON Inspector E2E User Flows', () => {
   });
 
   test('displays valid JSON required alert when input is invalid', async ({ page }) => {
+    await page.getByRole('button', { name: 'Format & Validate' }).click();
     const editor = page.getByRole('textbox', { name: 'JSON Input' });
     await editor.fill('{ broken: invalid json');
 

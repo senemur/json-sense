@@ -3,6 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('JSON Formatter & Minifier User Flows', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
+    await page.getByRole('button', { name: 'Format & Validate' }).click();
   });
 
   test('formats JSON with 2-space indentation', async ({ page }) => {

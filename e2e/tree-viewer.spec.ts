@@ -3,6 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('JSON Tree Viewer User Flows', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
+    await page.getByRole('button', { name: 'Format & Validate' }).click();
   });
 
   test('displays nested JSON structures with correct keys and values', async ({ page }) => {

@@ -3,6 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Smart JSON Repair E2E User Flows', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
+    await page.getByRole('button', { name: 'Format & Validate' }).click();
   });
 
   test('detects syntax errors, runs Smart Repair, inspects fixes, applies to editor and reverts', async ({ page }) => {

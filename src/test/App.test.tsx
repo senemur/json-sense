@@ -8,12 +8,12 @@ describe('App component & UI interactions', () => {
     document.documentElement.className = '';
   });
 
-  it('renders application header, brand, and default formatter tab', () => {
+  it('renders application header, brand, and default overview landing page', () => {
     render(<App />);
     expect(screen.getByText('JsonSense')).toBeInTheDocument();
     expect(screen.getByText('100% In-Browser & Private')).toBeInTheDocument();
-    expect(screen.getByText('Format (2 Spaces)')).toBeInTheDocument();
-    expect(screen.getByText('Minify')).toBeInTheDocument();
+    expect(screen.getByText(/The privacy-first developer studio for/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Run 5-Step Demo/i })).toBeInTheDocument();
   });
 
   it('toggles theme between light and dark', () => {
@@ -27,7 +27,7 @@ describe('App component & UI interactions', () => {
   });
 
   it('formats JSON with 2 spaces on button click', async () => {
-    render(<App />);
+    render(<App defaultTab="formatter" />);
     const editor = screen.getByLabelText(/JSON Input/i) as HTMLTextAreaElement;
 
     fireEvent.change(editor, { target: { value: '{"test":123}' } });
@@ -40,7 +40,7 @@ describe('App component & UI interactions', () => {
   });
 
   it('minifies JSON on button click', async () => {
-    render(<App />);
+    render(<App defaultTab="formatter" />);
     const editor = screen.getByLabelText(/JSON Input/i) as HTMLTextAreaElement;
 
     fireEvent.change(editor, { target: { value: '{\n  "a": 1,\n  "b": 2\n}' } });
@@ -53,7 +53,7 @@ describe('App component & UI interactions', () => {
   });
 
   it('displays syntax error alert for invalid JSON', async () => {
-    render(<App />);
+    render(<App defaultTab="formatter" />);
     const editor = screen.getByLabelText(/JSON Input/i) as HTMLTextAreaElement;
 
     fireEvent.change(editor, { target: { value: '{"bad": json}' } });
