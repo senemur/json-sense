@@ -147,3 +147,21 @@ export interface InspectorResult {
   };
 }
 
+export interface SchemaInferenceOptions {
+  draft?: 'draft-07';
+  title?: string;
+}
+
+export interface SchemaValidationError {
+  path: string;
+  keyword: string;
+  message: string;
+  expected?: string;
+  received?: string;
+}
+
+export interface SchemaValidationResult {
+  isValid: boolean;
+  errors: SchemaValidationError[];
+}
+
