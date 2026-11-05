@@ -1,6 +1,6 @@
 import type { Theme } from '../hooks/useTheme';
 
-export type TabId = 'formatter' | 'tree' | 'inspector' | 'schema' | 'typescript' | 'diff';
+export type TabId = 'overview' | 'formatter' | 'tree' | 'inspector' | 'schema' | 'typescript' | 'diff';
 
 interface HeaderProps {
   activeTab: TabId;
@@ -16,6 +16,7 @@ export function Header({
   onToggleTheme,
 }: HeaderProps) {
   const tabs: { id: TabId; label: string; icon: string }[] = [
+    { id: 'overview', label: 'Overview', icon: '✦' },
     { id: 'formatter', label: 'Format & Validate', icon: '{ }' },
     { id: 'tree', label: 'Tree Viewer', icon: '🌲' },
     { id: 'inspector', label: 'JSON Inspector', icon: '🔍' },
@@ -28,12 +29,17 @@ export function Header({
     <header className="border-b border-[#8d2f43]/15 dark:border-[#8d2f43]/30 bg-white/90 dark:bg-[#180c10]/90 backdrop-blur sticky top-0 z-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo and Brand */}
-          <div className="flex items-center gap-3">
+          {/* Logo and Brand (clickable to Overview) */}
+          <button
+            type="button"
+            onClick={() => onSelectTab('overview')}
+            className="flex items-center gap-3 text-left hover:opacity-90 transition cursor-pointer group"
+            title="Go to JsonSense Overview"
+          >
             <img
               src="/logo.png"
               alt="JsonSense Logo"
-              className="w-10 h-10 rounded-xl object-contain shadow-sm border border-[#8d2f43]/20 bg-[#f7f3f3]"
+              className="w-10 h-10 rounded-xl object-contain shadow-sm border border-[#8d2f43]/20 bg-[#f7f3f3] group-hover:scale-105 transition-transform"
             />
             <div>
               <div className="flex items-center gap-2">
@@ -45,7 +51,7 @@ export function Header({
                 Best Buddy for Json
               </p>
             </div>
-          </div>
+          </button>
 
           {/* Privacy badge and Theme Toggle */}
           <div className="flex items-center gap-3">

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Header } from './components/Header';
 import type { TabId } from './components/Header';
+import { OverviewTab } from './features/overview/OverviewTab';
 import { FormatterTab } from './features/formatter/FormatterTab';
 import { TreeViewTab } from './features/tree-view/TreeViewTab';
 import { InspectorTab } from './features/inspector/InspectorTab';
@@ -41,6 +42,13 @@ export function App() {
   const [jsonText, setJsonText] = useState<string>(INITIAL_JSON);
   const { theme, toggleTheme } = useTheme();
 
+  const handleNavigateWithJson = (tab: TabId, demoJson?: string) => {
+    if (demoJson !== undefined) {
+      setJsonText(demoJson);
+    }
+    setActiveTab(tab);
+  };
+
   return (
     <div className="min-h-screen bg-[#f7f3f3] dark:bg-[#120709] text-zinc-900 dark:text-zinc-100 flex flex-col font-sans transition-colors">
       <Header
@@ -51,6 +59,10 @@ export function App() {
       />
 
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+        {activeTab === 'overview' && (
+          <OverviewTab onNavigateToTab={handleNavigateWithJson} />
+        )}
+
         {activeTab === 'formatter' && (
           <FormatterTab
             json={jsonText}
