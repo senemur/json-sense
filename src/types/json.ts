@@ -62,3 +62,34 @@ export interface TypeScriptOptions {
   rootName?: string;
   exportTypes?: boolean;
 }
+
+export type RepairFixType =
+  | 'unquoted-key'
+  | 'single-quote'
+  | 'trailing-comma'
+  | 'comment'
+  | 'literal'
+  | 'unclosed-container'
+  | 'escaped-char'
+  | 'number-format';
+
+export interface RepairFix {
+  id: string;
+  type: RepairFixType;
+  description: string;
+  line?: number;
+}
+
+export interface RepairOptions {
+  indent?: 2 | 4;
+}
+
+export interface RepairResult {
+  success: boolean;
+  output: string;
+  original: string;
+  fixes: RepairFix[];
+  changed: boolean;
+  error?: string;
+}
+

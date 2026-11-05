@@ -1,8 +1,11 @@
 import { useState, useMemo } from 'react';
 import { TextEditor } from '../../components/TextEditor';
 import { StatusAlert } from '../../components/StatusAlert';
+import { SmartRepairPanel } from './SmartRepairPanel';
 import { formatJson, minifyJson } from '../../lib/formatter';
 import { validateJson } from '../../lib/validator';
+import { repairJson } from '../../lib/repair';
+import type { RepairResult } from '../../types/json';
 
 interface FormatterTabProps {
   json: string;
@@ -14,7 +17,7 @@ const SAMPLE_JSON = JSON.stringify(
     app: 'JSON Buddy',
     version: '0.1.0',
     description: 'Privacy-focused developer JSON toolkit',
-    features: ['Formatter', 'Validator', 'Tree Viewer', 'TypeScript Generator', 'JSON Diff'],
+    features: ['Formatter', 'Validator', 'Tree Viewer', 'TypeScript Generator', 'JSON Diff', 'Smart Repair'],
     maintainer: {
       name: 'Senem',
       role: 'Software Engineer',
@@ -36,6 +39,8 @@ const SAMPLE_JSON = JSON.stringify(
 
 export function FormatterTab({ json, onChangeJson }: FormatterTabProps) {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [repairResult, setRepairResult] = useState<RepairResult | null>(null);
+  const [previousJson, setPreviousJson] = useState<string | null>(null);
 
   const validation = useMemo(() => {
     if (!json.trim()) return null;
@@ -68,6 +73,31 @@ export function FormatterTab({ json, onChangeJson }: FormatterTabProps) {
       setErrorMessage(res.error || 'Invalid JSON');
     } else {
       setErrorMessage(null);
+    }
+  };
+
+  const handleSmartRepair = () => {
+    const res = repairJson(json);
+    setRepairResult(res);
+    if (!res.success) {
+      setErrorMessage(res.error || 'Could not safely repair JSON.');
+    } else {
+      setErrorMessage(null);
+    }
+  };
+
+  const handleApplyRepaired = (repairedOutput: string) => {
+    setPreviousJson(json);
+    onChangeJson(repairedOutput);
+    setRepairResult(null);
+    setErrorMessage(null);
+  };
+
+  const handleRevertToOriginal = () => {
+    if (previousJson !== null) {
+      onChangeJson(previousJson);
+      setPreviousJson(null);
+      setRepairResult(null);
     }
   };
 
@@ -104,6 +134,18 @@ export function FormatterTab({ json, onChangeJson }: FormatterTabProps) {
           >
             Check Validity
           </button>
+          <button
+            type="button"
+            onClick={handleSmartRepair}
+            className={`px-3 py-1.5 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 cursor-pointer ${
+              validation && !validation.isValid
+                ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-sm ring-2 ring-amber-500/30'
+                : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-700'
+            }`}
+          >
+            <span>✨</span>
+            <span>Smart Repair</span>
+          </button>
         </div>
 
         {validation && (
@@ -121,19 +163,63 @@ export function FormatterTab({ json, onChangeJson }: FormatterTabProps) {
         )}
       </div>
 
-      {/* Error Alert Display */}
-      {validation && !validation.isValid && (
-        <StatusAlert
-          type="error"
-          title="JSON Syntax Error"
-          message={validation.error || 'Invalid JSON'}
-          line={validation.line}
-          column={validation.column}
-          snippet={validation.snippet}
+      {/* Reversion Notice if previously applied */}
+      {previousJson !== null && (
+        <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 text-xs text-emerald-800 dark:text-emerald-300">
+          <div className="flex items-center gap-2">
+            <span>✓</span>
+            <span>Repaired JSON applied to editor.</span>
+          </div>
+          <button
+            type="button"
+            onClick={handleRevertToOriginal}
+            className="font-medium underline hover:text-emerald-950 dark:hover:text-emerald-100 cursor-pointer"
+          >
+            Revert to original input
+          </button>
+        </div>
+      )}
+
+      {/* Smart Repair Interactive Review Panel */}
+      {repairResult && (
+        <SmartRepairPanel
+          result={repairResult}
+          onApply={handleApplyRepaired}
+          onClose={() => setRepairResult(null)}
         />
       )}
 
-      {errorMessage && (!validation || validation.isValid) && (
+      {/* Error Alert Display with Smart Repair Suggestion */}
+      {validation && !validation.isValid && !repairResult && (
+        <div className="flex flex-col gap-2">
+          <StatusAlert
+            type="error"
+            title="JSON Syntax Error"
+            message={validation.error || 'Invalid JSON'}
+            line={validation.line}
+            column={validation.column}
+            snippet={validation.snippet}
+          />
+          <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/70 dark:bg-amber-950/30 text-xs">
+            <div className="flex items-center gap-2 text-amber-900 dark:text-amber-200">
+              <span className="text-sm">💡</span>
+              <span>
+                Detected syntax issues. Smart Repair can automatically fix unquoted keys, trailing commas, single quotes, or comments.
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={handleSmartRepair}
+              className="px-3 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-medium shadow-sm transition whitespace-nowrap cursor-pointer flex items-center gap-1"
+            >
+              <span>✨</span>
+              <span>Repair JSON Now</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {errorMessage && (!validation || validation.isValid) && !repairResult && (
         <StatusAlert
           type="error"
           title="Operation Error"
@@ -149,11 +235,14 @@ export function FormatterTab({ json, onChangeJson }: FormatterTabProps) {
           onChange={(val) => {
             onChangeJson(val);
             setErrorMessage(null);
+            setRepairResult(null);
           }}
           isValid={validation ? validation.isValid : null}
           onLoadSample={() => {
             onChangeJson(SAMPLE_JSON);
             setErrorMessage(null);
+            setRepairResult(null);
+            setPreviousJson(null);
           }}
         />
       </div>
