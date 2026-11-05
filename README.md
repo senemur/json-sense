@@ -122,20 +122,20 @@ src/
 ## Screenshots & UI Previews
 
 <!-- SCREENSHOT_PLACEHOLDER: Overview Landing Page and Feature Showcase -->
-
-> _Placeholder: Overview Landing Page showcasing developer studio capabilities, zero server exposure, and 5-step walkthrough._
+> <img width="1406" height="893" alt="image" src="https://github.com/user-attachments/assets/bf752efd-fb02-4ac6-b84d-b8f46c6194ee" />
+> Overview Landing Page showcasing developer studio capabilities, zero server exposure, and 5-step walkthrough.
 
 <!-- SCREENSHOT_PLACEHOLDER: Smart JSON Repair in Action -->
-
-> _Placeholder: Smart JSON Repair diagnosing unquoted keys, trailing commas, and Python literals with confidence ratings._
+> <img width="1496" height="850" alt="image" src="https://github.com/user-attachments/assets/c8351702-bcdf-47f4-821e-da0d0552e5c4" />
+> Smart JSON Repair diagnosing unquoted keys, trailing commas, and Python literals with confidence ratings.
 
 <!-- SCREENSHOT_PLACEHOLDER: JSON Structure & Quality Inspector -->
-
-> _Placeholder: JSON Inspector displaying structural telemetry, nesting depth, and JSONPath anomaly tracking._
+><img width="1387" height="579" alt="image" src="https://github.com/user-attachments/assets/16a92a76-d032-4aa7-a75e-848284bae15d" />
+> JSON Inspector displaying structural telemetry, nesting depth, and JSONPath anomaly tracking._
 
 <!-- SCREENSHOT_PLACEHOLDER: Schema Studio Multi-Sample Inference & Validation Workbench -->
-
-> _Placeholder: Schema Studio inferring schema from multiple samples and validating target payload with error table._
+><img width="1439" height="822" alt="image" src="https://github.com/user-attachments/assets/950e969b-1da5-40f1-b61b-f4843f755f27" />
+> Schema Studio inferring schema from multiple samples and validating target payload with error table._
 
 ---
 
