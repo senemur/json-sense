@@ -1,0 +1,63 @@
+{
+  "description": "Standard edge-case JSON payloads for testing and benchmarking JSON Buddy",
+  "primitives": {
+    "string": "Hello, JSON Buddy!",
+    "numberInteger": 42,
+    "numberFloat": 3.141592653589793,
+    "numberScientific": 1.25e-4,
+    "numberNegativeZero": -0,
+    "booleanTrue": true,
+    "booleanFalse": false,
+    "nullValue": null
+  },
+  "unicodeAndSpecial": {
+    "symbols": "© ® ™ € ¥ £",
+    "emojis": "🚀 🌲 ✨ 🛡️",
+    "escapedCharacters": "Line 1\nLine 2\tTabbed \"Quotes\" \\ Backslash",
+    "emptyKey": ""
+  },
+  "complexStructures": {
+    "emptyObject": {},
+    "emptyArray": [],
+    "multiDimensionalArray": [
+      [1, 2, 3],
+      [4, 5, 6]
+    ],
+    "arrayOfHeterogeneousObjects": [
+      {
+        "id": 1,
+        "name": "Alice",
+        "role": "admin",
+        "metadata": { "active": true, "score": 98.5 }
+      },
+      {
+        "id": 2,
+        "name": "Bob",
+        "email": "bob@example.com",
+        "metadata": { "active": false }
+      },
+      {
+        "id": 3,
+        "name": "Charlie",
+        "metadata": null
+      }
+    ],
+    "specialKeys": {
+      "kebab-case-key": "value",
+      "spaced key": "value",
+      "quoted\"key": "value",
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "123startsWithNumber": "value"
+    }
+  },
+  "invalidSyntaxCases": [
+    "{ unquotedKey: 1 }",
+    "{ 'singleQuotes': true }",
+    "{ \"trailingComma\": true, }",
+    "[ 1, 2, 3, ]",
+    "// single-line comment\n{ \"a\": 1 }",
+    "/* multi-line comment */ { \"a\": 1 }",
+    "{ \"unclosed\": \"string }",
+    "{ \"a\": 1 } { \"b\": 2 }"
+  ]
+}

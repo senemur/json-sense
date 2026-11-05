@@ -310,5 +310,122 @@ describe('Comprehensive Edge Cases & Correctness', () => {
       expect(filtered?.children?.length).toBe(1); // level1
       expect(filtered?.children?.[0].key).toBe('level1');
     });
+
+    it('returns null when filter query does not match any key or value', () => {
+      const data = { app: 'JSON Buddy', version: 1 };
+      const tree = buildTree(data);
+      expect(filterTree(tree, 'nonexistent_key_xyz')).toBeNull();
+    });
+  });
+
+  describe('Syntax Error Diagnostic Matrix', () => {
+    const invalidCases = [
+      { name: 'unquoted key', input: '{ name: "Buddy" }' },
+      { name: 'single quotes', input: "{ 'name': 'Buddy' }" },
+      { name: 'trailing comma in object', input: '{ "name": "Buddy", }' },
+      { name: 'trailing comma in array', input: '[ 1, 2, 3, ]' },
+      { name: 'JavaScript comment', input: '// a comment\n{ "a": 1 }' },
+      { name: 'multiple top-level roots', input: '{ "a": 1 } { "b": 2 }' },
+      { name: 'unclosed string literal', input: '{ "name": "unclosed }' },
+    ];
+
+    for (const testCase of invalidCases) {
+      it(`accurately rejects ${testCase.name} without stack trace leaks`, () => {
+        const res = validateJson(testCase.input);
+        expect(res.isValid).toBe(false);
+        expect(res.error).toBeDefined();
+        expect(res.error).not.toContain('.js:');
+        expect(res.error).not.toContain('node:internal');
+      });
+    }
+  });
+
+  describe('Unicode & Numeric Formatting & Minification', () => {
+    it('preserves Unicode escapes, special symbols, and emojis', () => {
+      const json = JSON.stringify({
+        copyright: '©',
+        euro: '€',
+        emoji: '🚀 JSON Buddy',
+        newlines: 'Line 1\nLine 2\tTabbed',
+      });
+
+      const formatted = formatJson(json);
+      expect(formatted.success).toBe(true);
+      expect(formatted.output).toContain('🚀 JSON Buddy');
+      expect(formatted.output).toContain('©');
+
+      const minified = minifyJson(formatted.output);
+      expect(minified.success).toBe(true);
+      expect(minified.output).toBe(json);
+    });
+
+    it('handles numeric edge cases: scientific notation, negative zero, and large integers', () => {
+      const json = '{"sci": 1.25e-4, "large": 9007199254740991, "negZero": -0}';
+      const formatted = formatJson(json);
+      expect(formatted.success).toBe(true);
+
+      const parsed = JSON.parse(formatted.output);
+      expect(parsed.sci).toBe(0.000125);
+      expect(parsed.large).toBe(9007199254740991);
+      expect(Object.is(parsed.negZero, -0) || parsed.negZero === 0).toBe(true);
+    });
+
+    it('handles multiline JSON with Windows CRLF line endings', () => {
+      const crlf = '{\r\n  "app": "Buddy",\r\n  "count": 42\r\n}';
+      const res = formatJson(crlf);
+      expect(res.success).toBe(true);
+      expect(res.output).toContain('"app": "Buddy"');
+    });
+  });
+
+  describe('Advanced Diff Type Transitions', () => {
+    it('detects type transition from primitive to object', () => {
+      const left = JSON.stringify({ prop: 42 });
+      const right = JSON.stringify({ prop: { nested: true } });
+
+      const res = compareJson(left, right);
+      expect(res.isEqual).toBe(false);
+      expect(res.summary.modified).toBe(1);
+      const mod = res.changes.find((c) => c.path === 'prop');
+      expect(mod?.type).toBe('modified');
+      expect(mod?.oldValue).toBe(42);
+      expect(mod?.newValue).toEqual({ nested: true });
+    });
+
+    it('detects type transition from null to empty object', () => {
+      const left = JSON.stringify({ prop: null });
+      const right = JSON.stringify({ prop: {} });
+
+      const res = compareJson(left, right);
+      expect(res.isEqual).toBe(false);
+      expect(res.summary.modified).toBe(1);
+    });
+
+    it('detects array element reordering as position-wise modifications', () => {
+      const left = JSON.stringify(['alpha', 'beta']);
+      const right = JSON.stringify(['beta', 'alpha']);
+
+      const res = compareJson(left, right);
+      expect(res.isEqual).toBe(false);
+      expect(res.summary.modified).toBe(2);
+    });
+  });
+
+  describe('Advanced TypeScript Structures', () => {
+    it('generates multi-dimensional array types', () => {
+      const json = JSON.stringify([[1, 2], [3, 4]]);
+      const res = generateTypeScript(json);
+      expect(res.success).toBe(true);
+      expect(res.code).toContain('type Root = number[][];');
+      assertValidTypeScript(res.code);
+    });
+
+    it('handles array of objects containing null elements', () => {
+      const json = JSON.stringify([{ id: 1 }, null]);
+      const res = generateTypeScript(json);
+      expect(res.success).toBe(true);
+      expect(res.code).toContain('null');
+      assertValidTypeScript(res.code);
+    });
   });
 });
